@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="AI for Interdisciplinary Design Portfolio by Christopher von Spitzer"
+    />
+    <title>AI for Interdisciplinary Design Portfolio — Christopher von Spitzer</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header class="masthead page-shell">
+        <p class="eyebrow">Christopher von Spitzer</p>
+        <h1>AI for Interdisciplinary<br />Design Portfolio</h1>
+      </header>
+
+      <section class="ribbon-section page-shell" aria-label="Interactive laughter field">
+        <div
+          class="ribbon-field"
+          id="ribbon-field"
+          role="button"
+          tabindex="0"
+          aria-label="Interactive laughter field. Click, tap, or press Enter to add a laugh."
+        >
+          <canvas id="ribbon-canvas"></canvas>
+          <p class="field-hint">Click to add a laugh.</p>
+        </div>
+        <button class="start-over" id="start-over" type="button">Start over</button>
+      </section>
+
+      <section class="projects page-shell" aria-label="Projects">
+        <div class="project-grid">
+          <a class="project-card project-card--cover" href="album.html">
+            <div class="project-image project-image--cover">
+              <picture>
+                <source srcset="assets/images/final_cover_album-web.jpg" type="image/jpeg" />
+                <img
+                  src="assets/images/final_cover_album.png"
+                  alt="Album cover with angled title lettering following a retro rocket’s looping path from Earth"
+                />
+              </picture>
+            </div>
+            <div class="project-meta">
+              <div>
+                <p class="project-number">01 / Album cover</p>
+                <h3>A Look Back at Earth</h3>
+              </div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+
+          <a class="project-card project-card--studio" href="studio.html">
+            <div class="project-image project-image--studio">
+              <img
+                src="assets/images/original-preview.png"
+                alt="Concept image of a bright, plant-filled laughter yoga studio"
+              />
+            </div>
+            <div class="project-meta">
+              <div>
+                <p class="project-number">02 / Spatial design</p>
+                <h3>Laughter Yoga Studio 2036</h3>
+              </div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/js/ribbons.js"></script>
+  </body>
+</html>
