@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BrainSail | Game proposal</title>
+<meta name="description" content="BrainSail is a lateral thinking game about sailing around storms. This is the game proposal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#FBF8F1;color:#1B1B1B;font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+
+#style-sound{
+  --ink:#1B1B1B;--paper:#FBF8F1;--sea:#4FA3C7;--sun:#F7D154;--boat:#3C9D57;--muted:#4A463F;
+  --hand:"Gochi Hand","Segoe Print","Bradley Hand","Comic Sans MS",cursive;
+  position:relative;isolation:isolate;overflow-x:clip;padding:0 0 5rem;
+}
+#style-sound::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent calc(50% - 7px),rgba(27,27,27,.04) calc(50% - 1px),rgba(27,27,27,.11) 50%,rgba(255,255,255,.55) calc(50% + 1px),transparent calc(50% + 8px)),
+    linear-gradient(180deg,transparent calc(50% - 7px),rgba(27,27,27,.035) calc(50% - 1px),rgba(27,27,27,.10) 50%,rgba(255,255,255,.55) calc(50% + 1px),transparent calc(50% + 8px)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='84' viewBox='0 0 160 84'%3E%3Cg fill='none' stroke='%234FA3C7' stroke-width='2.4' stroke-linecap='round' opacity='.3'%3E%3Cpath d='M8 20 q8-8 16 0 t16 0 t16 0'/%3E%3Cpath d='M92 62 q8-8 16 0 t16 0 t16 0'/%3E%3Cpath d='M104 14 q6-6 12 0 t12 0'/%3E%3Cpath d='M20 70 q6-6 12 0 t12 0'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:auto,auto,160px 84px;
+  background-repeat:no-repeat,no-repeat,repeat;
+}
+#style-sound .bs-wrap{width:min(1080px,92vw);margin:0 auto}
+#style-sound a{color:var(--ink);text-decoration-thickness:2px;text-underline-offset:3px;text-decoration-color:var(--sea)}
+#style-sound a:hover{background:var(--sun)}
+#style-sound :focus-visible{outline:3px solid var(--sea);outline-offset:3px;border-radius:6px}
+#style-sound h1,#style-sound h2,#style-sound h3{font-family:var(--hand);font-weight:400;line-height:1.05;margin:0}
+#style-sound p{margin:.5rem 0 0;max-width:62ch}
+
+.bs-top{padding:1.2rem 0 0;font-weight:600}
+.bs-hero{padding:1.5rem 0 1rem}
+.bs-hero h1{font-size:clamp(4rem,13vw,8.5rem);letter-spacing:.01em;transform:rotate(-1.5deg);transform-origin:left bottom}
+.bs-hero h1 span{background:linear-gradient(transparent 62%,var(--sun) 62%,var(--sun) 90%,transparent 90%);padding:0 .08em}
+.bs-lede{font-family:var(--hand);font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.2;max-width:28ch;margin-top:.6rem !important}
+.bs-sticker{display:inline-block;margin-top:1.1rem;padding:.25rem .9rem;background:var(--sun);border:3px solid var(--ink);border-radius:70px 12px 60px 12px/12px 60px 12px 70px;font-family:var(--hand);font-size:1.25rem;transform:rotate(-2deg)}
+
+.bs-frame{border:3px solid var(--ink);border-radius:90px 14px 80px 14px/14px 80px 14px 90px;background:rgba(255,255,255,.5);padding:clamp(.5rem,2vw,1.2rem);margin-top:1.4rem}
+.bs-frame svg{display:block;width:100%;height:auto}
+.bs-hand{font-family:var(--hand)}
+
+.bs-intro{margin:2.6rem 0 .5rem}
+.bs-intro h2{font-size:clamp(2rem,5vw,3rem)}
+.bs-hl{background:linear-gradient(transparent 58%,var(--sun) 58%,var(--sun) 92%,transparent 92%);padding:0 .15em}
+
+.bs-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.2rem,3vw,2.4rem);align-items:start;margin:3rem 0}
+.bs-row h2{font-size:clamp(2rem,4.6vw,2.9rem)}
+.bs-row h3{font-size:1.7rem;margin-top:.9rem}
+.bs-k{font-weight:800;font-size:1rem;color:var(--muted);margin:1.1rem 0 .1rem;font-family:var(--hand);letter-spacing:.02em}
+.bs-k+p{margin-top:0}
+.bs-name{display:inline-block;font-family:var(--hand);font-size:1.3rem;background:var(--sun);border:3px solid var(--ink);border-radius:60px 10px 50px 10px/10px 50px 10px 60px;padding:0 .8rem;transform:rotate(-1.5deg);margin-bottom:.4rem}
+.bs-demo{border:3px solid var(--ink);border-radius:90px 14px 80px 14px/14px 80px 14px 90px;background:rgba(255,255,255,.55);padding:clamp(1rem,2.5vw,1.6rem)}
+.bs-demo small{display:block;margin-top:.9rem;color:var(--muted);font-size:.9rem;line-height:1.4}
+
+.bs-chips{display:grid;gap:.7rem}
+.bs-chip{display:flex;align-items:center;gap:.9rem}
+.bs-chip i{flex:none;width:46px;height:46px;border:3px solid var(--ink);border-radius:52% 48% 55% 45%/48% 55% 45% 52%}
+.bs-chip b{font-family:var(--hand);font-weight:400;font-size:1.25rem;display:block;line-height:1.1}
+.bs-chip span{font-size:.95rem;color:var(--muted);line-height:1.3;display:block}
+.bs-type{display:flex;gap:1.6rem;align-items:flex-end;margin-top:1.1rem;padding-top:1rem;border-top:3px dashed rgba(27,27,27,.25)}
+.bs-type div{font-size:.85rem;color:var(--muted);line-height:1.2}
+.bs-type strong{display:block;font-size:3.2rem;line-height:1;color:var(--ink);font-weight:400}
+
+.bs-btn{font-family:var(--hand);font-size:1.2rem;line-height:1.1;color:var(--ink);background:var(--paper);border:3px solid var(--ink);border-radius:50px 10px 44px 10px/10px 44px 10px 50px;padding:.5rem 1.05rem;cursor:pointer;min-height:44px;transition:background .15s,transform .15s}
+.bs-btn:hover{background:var(--sun)}
+.bs-btn:active{transform:translateY(2px)}
+.bs-btn[disabled]{opacity:.5;cursor:default}
+.bs-btn.is-sea{background:var(--sea)}
+.bs-btn.is-sea:hover{background:#6bb7d6}
+
+.bs-mock{display:grid;gap:1rem}
+.bs-mockhead{display:flex;gap:1rem;align-items:center}
+.bs-ring{flex:none;width:92px;height:92px}
+.bs-ring line{stroke:var(--ink);stroke-width:4;stroke-linecap:round}
+.bs-ring text{font-family:var(--hand);font-size:26px;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.bs-prob{font-size:.98rem;line-height:1.35}
+.bs-prob b{font-family:var(--hand);font-weight:400;font-size:1.15rem;display:block}
+.bs-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+.bs-wc{font-family:var(--hand);font-size:1.5rem;color:var(--ink);background:#fff;border:3px solid var(--ink);border-radius:30px 8px 26px 8px/8px 26px 8px 30px;padding:1rem .3rem;cursor:pointer;min-height:64px;transition:transform .2s,background .2s,opacity .2s}
+.bs-wc:nth-child(1){transform:rotate(-2deg)}
+.bs-wc:nth-child(2){transform:rotate(1.2deg)}
+.bs-wc:nth-child(3){transform:rotate(-1deg)}
+.bs-wc:hover{background:#fff6cf}
+.bs-wc.is-on{background:var(--sun);transform:translateY(-5px) rotate(0)}
+.bs-wc.is-off{opacity:.45}
+.bs-write{min-height:74px;border:3px solid var(--ink);border-radius:20px 6px 18px 6px/6px 18px 6px 20px;background:repeating-linear-gradient(transparent,transparent 25px,rgba(79,163,199,.45) 25px,rgba(79,163,199,.45) 27px);padding:.5rem .8rem;font-family:var(--hand);font-size:1.15rem;color:var(--muted)}
+.bs-answer{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+
+.bs-stage{position:relative;height:220px;overflow:hidden;border:3px solid var(--ink);border-radius:30px 8px 26px 8px/8px 26px 8px 30px;background:rgba(79,163,199,.14)}
+.bs-waves{position:absolute;left:0;right:0;bottom:0;width:100%;height:56px}
+.bs-cloudbox{position:absolute;right:7%;top:6%;width:44%;max-width:210px;transition:transform .7s ease,opacity .7s ease}
+.bs-cloudbox svg,.bs-boatbox svg{display:block;width:100%;height:auto}
+.bs-boatbox{position:absolute;left:8%;bottom:20%;width:38%;max-width:170px;transition:transform 1.6s ease-in,opacity 1.6s ease-in}
+.bs-boatbox .in{animation:bs-bob 3.2s ease-in-out infinite}
+.bs-puff,.bs-bubbles{position:absolute;pointer-events:none}
+.bs-puff{right:20%;top:26%;width:60px;height:60px}
+.bs-bubbles{left:22%;bottom:30%;width:60px;height:60px}
+.bs-puff i,.bs-bubbles i{position:absolute;width:12px;height:12px;border:3px solid var(--ink);border-radius:50%;opacity:0}
+.bs-puff i:nth-child(1){left:6px;top:20px}.bs-puff i:nth-child(2){left:30px;top:10px}.bs-puff i:nth-child(3){left:44px;top:32px}
+.bs-bubbles i:nth-child(1){left:4px;bottom:0}.bs-bubbles i:nth-child(2){left:26px;bottom:6px}.bs-bubbles i:nth-child(3){left:44px;bottom:0}
+.bs-stage.is-hit .bs-boatbox .in{animation:bs-shake .5s ease-in-out 1}
+.bs-stage.is-solved .bs-cloudbox{transform:scale(.12) rotate(40deg);opacity:0}
+.bs-stage.is-solved .bs-puff i{animation:bs-rise 1s ease-out 1 forwards}
+.bs-stage.is-solved .bs-puff i:nth-child(2){animation-delay:.1s}.bs-stage.is-solved .bs-puff i:nth-child(3){animation-delay:.2s}
+.bs-stage.is-sunk .bs-boatbox{transform:translateY(64px) rotate(30deg);opacity:.25}
+.bs-stage.is-sunk .bs-bubbles i{animation:bs-rise 1.6s ease-out 1 forwards}
+.bs-stage.is-sunk .bs-bubbles i:nth-child(2){animation-delay:.3s}.bs-stage.is-sunk .bs-bubbles i:nth-child(3){animation-delay:.6s}
+.bs-ctl{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.9rem}
+
+.bs-lede2{font-family:var(--hand);font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.25;max-width:36ch;margin-top:.5rem !important}
+.bs-steer h3{font-size:1.9rem;margin:3rem 0 .4rem}
+.bs-steer .bs-demo{margin-top:1rem}
+.bs-steergrid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(1rem,3vw,2rem);align-items:center}
+.bs-map{position:relative;border:3px solid var(--ink);border-radius:30px 8px 26px 8px/8px 26px 8px 30px;background:rgba(79,163,199,.12);overflow:hidden;cursor:pointer;touch-action:manipulation}
+.bs-map svg{display:block;width:100%;height:auto}
+.bs-map:focus-visible{outline:3px solid var(--sea);outline-offset:4px}
+.bs-mshake.is-hit{animation:bs-shake .5s ease-in-out 1}
+.bs-keys{display:grid;grid-template-columns:76px 76px 76px;grid-template-rows:46px 46px;gap:6px;justify-content:center}
+.bs-key{display:grid;place-items:center;padding:0;background:var(--paper);border:3px solid var(--ink);border-radius:14px 6px 12px 6px/6px 12px 6px 14px;cursor:pointer;touch-action:none;transition:background .1s,transform .1s}
+.bs-key svg{width:22px;height:22px;display:block}
+.bs-key:hover{background:#fff6cf}
+.bs-key.is-down,.bs-key:active{background:var(--sun);transform:translateY(2px)}
+.bs-key[data-dir=left]{grid-column:1;grid-row:1/3}
+.bs-key[data-dir=up]{grid-column:2;grid-row:1}
+.bs-key[data-dir=down]{grid-column:2;grid-row:2}
+.bs-key[data-dir=right]{grid-column:3;grid-row:1/3}
+.bs-sounds{list-style:none;margin:0;padding:0;display:grid;gap:.55rem}
+.bs-sounds li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:.7rem;align-items:center;padding:.5rem 0;border-bottom:2px dashed rgba(27,27,27,.2)}
+.bs-sounds li:last-child{border-bottom:0}
+.bs-sounds b{font-family:var(--hand);font-weight:400;font-size:1.25rem;display:block;line-height:1.1}
+.bs-sounds span.d{font-size:.92rem;color:var(--muted);line-height:1.3;display:block}
+.bs-bars{display:flex;gap:3px;align-items:center;height:26px;width:34px}
+.bs-bars i{display:block;width:5px;height:100%;background:var(--ink);border-radius:3px;transform:scaleY(.25);transform-origin:center}
+.bs-bars.playing i{animation:bs-bars .45s ease-in-out infinite alternate}
+.bs-bars.playing i:nth-child(2){animation-delay:.1s;background:var(--sea)}
+.bs-bars.playing i:nth-child(3){animation-delay:.2s}
+.bs-bars.playing i:nth-child(4){animation-delay:.05s;background:var(--sun);box-shadow:0 0 0 1px var(--ink)}
+.bs-audiobar{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin-bottom:.8rem}
+.bs-status{font-size:.92rem;color:var(--muted)}
+
+.bs-refs{margin:4rem 0 0}
+.bs-refs>h2{font-size:clamp(2rem,5vw,3rem)}
+.bs-refgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1rem,2.4vw,1.8rem);margin-top:1.8rem}
+.bs-ref{position:relative;background:#fff;border:3px solid var(--ink);border-radius:16px 6px 14px 6px/6px 14px 6px 16px;padding:1.6rem 1.3rem 1.3rem;box-shadow:5px 6px 0 rgba(27,27,27,.14)}
+.bs-ref:nth-child(1){transform:rotate(-1.2deg)}
+.bs-ref:nth-child(2){transform:rotate(.9deg)}
+.bs-ref:nth-child(3){transform:rotate(-.6deg)}
+.bs-ref::before{content:"";position:absolute;left:50%;top:-14px;width:84px;height:26px;background:rgba(247,209,84,.85);border:2px solid rgba(27,27,27,.5);transform:translateX(-50%) rotate(-3deg)}
+.bs-ref h3{font-size:1.9rem}
+.bs-how{display:inline-block;font-size:.88rem;font-weight:800;background:rgba(79,163,199,.28);border-radius:20px;padding:.05rem .7rem;margin:0 0 .5rem}
+.bs-ref p{font-size:.98rem;line-height:1.55}
+.bs-ref .bs-k{font-size:1.05rem;margin-top:.9rem}
+
+.bs-credits{margin:4rem 0 0;border-top:3px dashed rgba(27,27,27,.3);padding-top:1.6rem}
+.bs-credits h2{font-size:2rem}
+.bs-credits ul{margin:.7rem 0 0;padding-left:1.2rem}
+.bs-credits li{margin:.35rem 0;max-width:70ch}
+
+
+#style-sound [hidden]{display:none !important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.bs-lede{max-width:34ch !important}
+.bs-cast{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:1.1rem;padding-top:1rem;border-top:3px dashed rgba(27,27,27,.25)}
+.bs-cast figure{margin:0;text-align:center;font-size:.85rem;line-height:1.2;color:var(--muted)}
+.bs-cast svg{display:block;width:100%;height:64px;margin-bottom:.3rem}
+.bs-play .bs-screens{display:grid}
+.bs-screen{grid-area:1/1;min-width:0;display:flex;flex-direction:column}
+.bs-screen.is-off{visibility:hidden;pointer-events:none}
+.bs-map{position:relative;flex:1;display:flex;align-items:center;border:3px solid var(--ink);border-radius:30px 8px 26px 8px/8px 26px 8px 30px;background-color:rgba(79,163,199,.12);overflow:hidden;cursor:pointer;touch-action:manipulation;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='56' viewBox='0 0 104 56'%3E%3Cg fill='none' stroke='%234FA3C7' stroke-width='2.6' stroke-linecap='round' opacity='.6'%3E%3Cpath d='M10 14 q7-8 14 0 t14 0 t14 0'/%3E%3Cpath d='M64 42 q7-8 14 0 t14 0'/%3E%3Cpath d='M72 12 q6-6 12 0 t12 0'/%3E%3Cpath d='M6 46 q6-6 12 0 t12 0'/%3E%3C/g%3E%3C/svg%3E")}
+.bs-map svg{display:block;width:100%;height:auto}
+.bs-map:focus-visible{outline:3px solid var(--sea);outline-offset:4px}
+.bs-flashfx{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.bs-flashfx.on{animation:bs-fx .35s ease-out 1}
+.bs-mcloud .bs-mc-in{transition:transform .6s ease,opacity .6s ease}
+.bs-mcloud.is-gone .bs-mc-in{transform:scale(.1) rotate(40deg);opacity:0}
+.bs-mbolt{opacity:0}
+.bs-mbolt.on{opacity:1;animation:bs-flash2 .42s steps(1) 1}
+.bs-bolt{opacity:0;animation:bs-flash 7s linear infinite}
+.bs-mshake{transition:transform 1.4s ease-in,opacity 1.4s ease-in}
+.bs-mshake.is-hit{animation:bs-shake .5s ease-in-out 1}
+.bs-mshake.is-sunk{transform:translateY(34px) rotate(30deg);opacity:.25}
+.bs-solve{flex:1;border:3px solid var(--ink);border-radius:30px 8px 26px 8px/8px 26px 8px 30px;background:#fff;padding:clamp(.8rem,2.4vw,1.1rem);display:flex;flex-direction:column;gap:.7rem}
+.bs-solvehead{display:flex;align-items:center;gap:.6rem}
+.bs-solvehead svg{width:64px;height:48px;flex:none}
+.bs-solvehead h3{font-size:1.9rem;margin:0}
+.bs-instr{margin:0 !important;max-width:none !important;background:var(--sun);border:3px solid var(--ink);border-radius:30px 8px 26px 8px/8px 26px 8px 30px;padding:.5rem .85rem;font-family:var(--hand);font-size:1.2rem;line-height:1.25}
+.bs-typein{width:100%;min-height:104px;resize:vertical;font-family:var(--hand);font-size:1.25rem;line-height:27px;color:var(--ink);background:repeating-linear-gradient(transparent,transparent 25px,rgba(79,163,199,.45) 25px,rgba(79,163,199,.45) 27px);border:3px solid var(--ink);border-radius:20px 6px 18px 6px/6px 18px 6px 20px;padding:.45rem .8rem}
+.bs-typein::placeholder{color:#6b665d}
+.bs-typein[readonly]{background-color:#f4efe2}
+.bs-timesup{padding:.7rem .8rem;border:3px solid var(--ink);border-radius:26px 8px 22px 8px/8px 22px 8px 26px;background:#fff6cf}
+.bs-timesup b{font-family:var(--hand);font-weight:400;font-size:1.45rem;display:block;line-height:1.1;margin-bottom:.5rem}
+.bs-play .bs-keys{margin-top:1rem}
+.bs-playbar{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;justify-content:center;margin-top:.9rem}
+@keyframes bs-flash{0%,84%,100%{opacity:0}85%{opacity:1}87%{opacity:.1}89%{opacity:1}93%{opacity:0}}
+@keyframes bs-flash2{0%{opacity:1}30%{opacity:.1}50%{opacity:1}100%{opacity:0}}
+@keyframes bs-fx{0%{opacity:.5}100%{opacity:0}}
+
+#style-sound .bsp-sub{margin:2.6rem 0 .8rem}
+#style-sound .bsp-card h3{margin:0 0 .3rem}
+#style-sound .bsp-moment h3{margin:0 0 .2rem}
+.bsp-moments{display:grid;gap:1.4rem}
+.bsp-moment{display:grid;grid-template-columns:minmax(220px,.85fr) minmax(0,1.5fr);column-gap:clamp(1rem,3vw,2rem);align-items:start}
+.bsp-moment .bsp-fig{grid-row:1/3}
+.bsp-pair.one{grid-template-columns:minmax(0,560px)}
+.bsp-q{margin-left:0}
+@media (max-width:860px){.bsp-moment{grid-template-columns:1fr}.bsp-moment .bsp-fig{grid-row:auto;margin-bottom:.8rem}}
+
+.bsp-by{margin:.9rem 0 0 !important;color:var(--muted);font-size:.98rem}
+.bsp-nav{position:sticky;top:0;z-index:30;display:flex;gap:.5rem;overflow-x:auto;padding:.6rem .3rem;margin:1.4rem 0 0;background:rgba(251,248,241,.95);border-bottom:3px dashed rgba(27,27,27,.25);scrollbar-width:thin}
+.bsp-nav a{flex:none;font-family:var(--hand);font-size:1.15rem;line-height:1.2;text-decoration:none;color:var(--ink);border:3px solid var(--ink);border-radius:40px 8px 34px 8px/8px 34px 8px 40px;padding:.2rem .8rem;background:var(--paper)}
+.bsp-nav a:hover{background:var(--sun)}
+.bsp-sec{margin:4.5rem 0 0;scroll-margin-top:4.5rem}
+.bsp-head{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.4rem}
+.bsp-num{flex:none;display:grid;place-items:center;width:3.4rem;height:3.4rem;border:3px solid var(--ink);border-radius:50% 45% 55% 48%;background:var(--sun);font-family:var(--hand);font-size:2rem;line-height:1}
+.bsp-head h2{font-size:clamp(2.1rem,5vw,3.2rem)}
+.bsp-head p{margin:.25rem 0 0;color:var(--muted)}
+.bsp-sub{font-size:1.9rem;margin:2.4rem 0 .7rem}
+.bsp-card{border:3px solid var(--ink);border-radius:60px 12px 52px 12px/12px 52px 12px 60px;background:rgba(255,255,255,.58);padding:clamp(1rem,2.6vw,1.6rem)}
+.bsp-card h3{font-size:1.7rem;margin:0 0 .3rem}
+.bsp-card h3 small{font-family:var(--font-body,inherit);font-size:.85rem;color:var(--muted);font-weight:600}
+.bsp-two{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(1rem,3vw,2rem);align-items:start}
+.bsp-big{font-size:1.25rem;line-height:1.5;max-width:none !important}
+.bsp-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,2.4vw,1.6rem)}
+.bsp-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1rem,2.4vw,1.4rem)}
+.bsp-case{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,3vw,2rem)}
+.bsp-btn{display:inline-block;font-family:var(--hand);font-size:1.2rem;text-decoration:none !important;border:3px solid var(--ink);border-radius:50px 10px 44px 10px/10px 44px 10px 50px;padding:.45rem 1rem;background:var(--sun);margin-top:.3rem}
+.bsp-btn:hover{background:#ffe27a !important}
+.bsp-links a{display:inline-block;margin:.15rem .6rem .15rem 0}
+.bsp-tag{display:inline-block;font-weight:800;font-size:.82rem;line-height:1.3;border:2px solid var(--ink);border-radius:20px;padding:.05rem .65rem;margin-right:.4rem;vertical-align:baseline}
+.t-src{background:rgba(79,163,199,.35)}
+.t-obs{background:rgba(247,209,84,.7)}
+.t-int{background:#fff;border-style:dashed}
+.bsp-legend{margin:1.4rem 0 0;max-width:none !important;font-size:.95rem;color:var(--muted)}
+.bsp-fig{margin:0}
+.bsp-fig img{display:block;width:100%;height:auto;border:3px solid var(--ink);border-radius:14px 6px 12px 6px/6px 12px 6px 14px;background:#fff}
+.bsp-fig figcaption,.bsp-frame2 figcaption{font-size:.88rem;color:var(--muted);margin-top:.4rem;line-height:1.35}
+.bsp-fig.wide{max-width:760px}
+.bsp-moment h3{margin-top:.8rem}
+.bsp-moment dl,.bsp-dl{margin:0}
+.bsp-moment dt,.bsp-dl dt{font-family:var(--hand);font-size:1.1rem;color:var(--muted);margin-top:.7rem}
+.bsp-moment dd,.bsp-dl dd{margin:0;font-size:.97rem;line-height:1.5}
+.bsp-dl dt{font-size:1.25rem}
+.bsp-scroll{overflow-x:auto}
+.bsp-table{width:100%;border-collapse:separate;border-spacing:0;border:3px solid var(--ink);border-radius:20px 6px 18px 6px/6px 18px 6px 20px;background:rgba(255,255,255,.6);overflow:hidden;font-size:.96rem;line-height:1.45}
+.bsp-table th,.bsp-table td{padding:.7rem .85rem;text-align:left;vertical-align:top;border-bottom:2px dashed rgba(27,27,27,.2)}
+.bsp-table thead th{font-family:var(--hand);font-weight:400;font-size:1.15rem;background:rgba(247,209,84,.45);border-bottom:3px solid var(--ink)}
+.bsp-table tbody tr:last-child th,.bsp-table tbody tr:last-child td{border-bottom:0}
+.bsp-table tbody th{font-weight:800;min-width:9rem}
+.bsp-table tbody th span{display:block;font-weight:600;color:var(--muted);font-size:.92rem}
+.bsp-th-img{display:inline-block;width:68px;height:52px;object-fit:cover;border:2px solid var(--ink);border-radius:8px;margin:.5rem .4rem 0 0;background:#fff}
+.bsp-list{margin:.6rem 0 0;padding-left:1.2rem}
+.bsp-list li{margin:.55rem 0;max-width:70ch;line-height:1.55}
+.bsp-list.tight li{margin:.35rem 0}
+.bsp-q{font-family:var(--hand);font-size:1.25rem;line-height:1.35;border-left:6px solid var(--sun);padding:.1rem 0 .1rem .9rem;margin:.8rem 0 0 !important;max-width:none !important}
+.bsp-chat{display:grid;gap:.9rem}
+.bsp-bub{border:3px solid var(--ink);border-radius:30px 8px 26px 8px/8px 26px 8px 30px;padding:.8rem 1.1rem;max-width:88%;background:#fff}
+.bsp-bub b{font-family:var(--hand);font-weight:400;font-size:1.2rem;display:block;color:var(--muted)}
+.bsp-bub p{max-width:none;font-size:.98rem;line-height:1.55;margin:.4rem 0 0}
+.bsp-bub.me{background:#fff6cf;justify-self:end}
+.bsp-bub.ai{background:rgba(79,163,199,.16)}
+.bsp-ver td:first-child{min-width:14rem}
+.bsp-frame2{margin:0}
+.bsp-frame2 svg{display:block;width:100%;max-width:760px;height:auto;border:3px solid var(--ink);border-radius:60px 12px 52px 12px/12px 52px 12px 60px;background:rgba(255,255,255,.55);padding:.6rem}
+.fc-paper{fill:#FBF8F1}.fc-sea{fill:#cfe7f3}.fc-sun{fill:#fbe8a0}
+.bsp-th{font-family:var(--hand);font-size:19px;fill:#1B1B1B}
+.bsp-ts{font-family:"Nunito",system-ui,sans-serif;font-size:13px;fill:#4A463F}
+.bsp-ar{stroke:#1B1B1B;stroke-width:2.8;stroke-linecap:round;fill:none}
+.bsp-beats{margin:.6rem 0 0;padding-left:1.3rem}
+.bsp-beats li{margin:.7rem 0;max-width:72ch;line-height:1.55}
+.bsp-boards{display:grid;gap:1.4rem}
+.bsp-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:.7rem}
+.bsp-frame h3 small{display:inline-block;margin-left:.5rem}
+.bsp-done{margin-top:1.6rem !important;max-width:none !important;border:3px dashed var(--ink);border-radius:30px 8px 26px 8px/8px 26px 8px 30px;padding:.9rem 1.1rem;background:rgba(247,209,84,.35)}
+.bsp-sec6{margin-bottom:-1rem}
+@media (max-width:860px){
+  .bsp-two,.bsp-grid2,.bsp-grid3,.bsp-case{grid-template-columns:1fr}
+  .bsp-bub{max-width:100%}
+}
+@keyframes bs-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+@keyframes bs-orbit{from{transform:rotate(0) translateX(14px) rotate(0)}to{transform:rotate(360deg) translateX(14px) rotate(-360deg)}}
+@keyframes bs-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-3deg)}40%{transform:translateX(8px) rotate(3deg)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+@keyframes bs-rise{0%{transform:translateY(0);opacity:.95}100%{transform:translateY(-60px);opacity:0}}
+@keyframes bs-bars{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
+.orbit{transform-box:fill-box;transform-origin:center;animation:bs-orbit 8s linear infinite}
+.orbit.o2{animation-duration:10s;animation-delay:-3s}
+.orbit.o3{animation-duration:9s;animation-delay:-6s}
+.bob{transform-box:fill-box;transform-origin:center;animation:bs-bob 3.6s ease-in-out infinite}
+
+@media (max-width:860px){
+  .bs-steergrid{grid-template-columns:1fr}
+  .bs-row{grid-template-columns:1fr;margin:2.4rem 0}
+  .bs-refgrid{grid-template-columns:1fr}
+  .bs-ref:nth-child(n){transform:none}
+}
+@media (max-width:480px){
+  .bs-cast{grid-template-columns:repeat(2,1fr)}
+  .bs-sounds li{grid-template-columns:minmax(0,1fr) auto}
+  .bs-bars{display:none}
+  .bs-answer{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #style-sound *,#style-sound *::before,#style-sound *::after{animation:none !important;transition:none !important}
+  #style-sound .bs-bolt{opacity:.9}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <marker id="bs-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1 L8 5 L2 9" fill="none" stroke="#1B1B1B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <pattern id="bs-wavepat" width="104" height="56" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#4FA3C7" stroke-width="2.6" stroke-linecap="round" opacity=".6">
+        <path d="M10 14 q7-8 14 0 t14 0 t14 0"/>
+        <path d="M64 42 q7-8 14 0 t14 0"/>
+        <path d="M72 12 q6-6 12 0 t12 0"/>
+        <path d="M6 46 q6-6 12 0 t12 0"/>
+      </g>
+    </pattern>
+    <symbol id="bs-cloud" viewBox="0 0 160 120">
+      <path d="M22 62 C6 58 8 34 30 34 C32 14 62 8 74 26 C88 8 122 14 122 38 C142 38 148 64 126 66 C118 76 100 76 92 68 C80 78 58 78 50 68 C40 70 26 70 22 62 Z" fill="#fff" fill-opacity=".6" stroke="#1B1B1B" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="none" stroke="#1B1B1B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M44 46 c8-10 20 0 12 8 c-6 6-16-2-8-8"/>
+        <path d="M82 42 c8-10 20 0 12 8 c-6 6-16-2-8-8"/>
+        <path d="M108 54 c6-6 14 0 8 6"/>
+      </g>
+      <path d="M38 88 l-4 12 M62 92 l-4 12 M110 92 l-4 12 M128 86 l-4 12" fill="none" stroke="#4FA3C7" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="bs-bolt" viewBox="0 0 160 120">
+      <path d="M88 62 L70 90 L84 90 L66 118 L104 80 L88 80 L100 62 Z" fill="#F7D154" stroke="#1B1B1B" stroke-width="3" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="bs-boat" viewBox="0 0 90 80">
+      <g stroke="#1B1B1B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M42 10 L42 48 L12 48 Z" fill="#3C9D57"/>
+        <path d="M44 6 L44 52" fill="none"/>
+      </g>
+      <g stroke="#1B1B1B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M68 41 L76 33" fill="none"/>
+        <path d="M56 52 L56 39 Q62 35 68 39 L68 52 Z" fill="#FBF8F1"/>
+        <circle cx="62" cy="30" r="5.5" fill="#FBF8F1"/>
+        <circle cx="59.6" cy="30" r="1.05" fill="#1B1B1B" stroke="none"/>
+        <circle cx="64.4" cy="30" r="1.05" fill="#1B1B1B" stroke="none"/>
+      </g>
+      <g stroke="#1B1B1B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 52 L82 52 L70 70 L20 70 Z" fill="#FBF8F1"/>
+        <path d="M44 6 l8 3 l-8 3" fill="#3C9D57"/>
+      </g>
+      <path d="M4 75 q8 -6 16 0 t16 0 t16 0 t16 0 t16 0" fill="none" stroke="#4FA3C7" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="bs-palm" viewBox="0 0 64 84">
+      <g fill="none" stroke="#1B1B1B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M30 82 C 34 64, 28 48, 34 30"/>
+        <path d="M34 30 C 24 18, 10 20, 3 32"/>
+        <path d="M34 30 C 26 12, 12 8, 5 12"/>
+        <path d="M34 30 C 44 16, 58 18, 62 30"/>
+        <path d="M34 30 C 42 10, 54 8, 61 12"/>
+        <path d="M34 30 C 33 18, 36 8, 42 3"/>
+        <path d="M31 70 l5 -2 M33 58 l5 -2 M33 46 l5 -2" stroke-width="2"/>
+      </g>
+      <g fill="#F7D154" stroke="#1B1B1B" stroke-width="2.4"><circle cx="31" cy="34" r="3.6"/><circle cx="38" cy="34" r="3.6"/></g>
+    </symbol>
+    <symbol id="bs-princess" viewBox="0 0 60 92">
+      <g stroke="#1B1B1B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M24 38 L10 22" fill="none"/>
+        <path d="M36 38 L46 50" fill="none"/>
+        <path d="M30 36 L12 84 L48 84 Z" fill="#4FA3C7"/>
+        <path d="M22 24 q-5 14 -1 28 M38 24 q5 14 1 28" fill="none" stroke-width="2.2"/>
+        <circle cx="30" cy="25" r="8" fill="#FBF8F1"/>
+        <path d="M22 18 L24 8 L30 14 L36 8 L38 18 Z" fill="#F7D154"/>
+        <path d="M26 27 h.1 M34 27 h.1" fill="none" stroke-width="2.4"/>
+        <path d="M27 30.5 q3 2.5 6 0" fill="none" stroke-width="1.6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<main id="style-sound">
+  <div class="bs-wrap">
+
+    <div class="bs-top"><a href="https://mrvspitzer.github.io/ai-interdisciplinary-design-portfolio/">Back to my portfolio</a></div>
+
+    <header class="bs-hero">
+      <h1><span>BrainSail</span></h1>
+      <p class="bs-lede">Sail from A to B to rescue a stranded princess. When a storm hits, solve it with one random word.</p>
+      <p class="bs-lede2">Every storm is one rep that builds your <span class="bs-hl">lateral thinking muscles</span>.</p>
+      <span class="bs-sticker">A game proposal for Professor Weidi Zhang</span>
+
+      <p class="bsp-by">by Christopher von Spitzer. DSC 494/598 AI for Interdisciplinary Design. October 28, 2026.</p>
+
+      <figure class="bs-frame" style="margin-left:0;margin-right:0">
+        <svg viewBox="0 0 760 380" role="img" aria-label="A map sketch. A hero sails a small green boat from point A past three big storm clouds with lightning that drift in circles. A stranded princess waves for help from the island at point B. Palm trees stand on both islands.">
+          <rect width="760" height="380" fill="#4FA3C7" opacity=".1"/>
+          <rect width="760" height="380" fill="url(#bs-wavepat)"/>
+          <g fill="#FBF8F1" stroke="#1B1B1B" stroke-width="3.2" stroke-linejoin="round">
+            <path d="M8 336 C 4 298, 46 284, 90 290 C 134 296, 150 326, 136 350 C 118 372, 40 372, 22 356 Z"/>
+            <path d="M606 100 C 602 62, 656 40, 702 46 C 744 52, 756 96, 740 122 C 720 146, 632 144, 614 122 Z"/>
+          </g>
+          <path d="M258 236 C 285 212, 305 190, 345 186 S 450 188, 490 150 S 545 108, 600 98" fill="none" stroke="#1B1B1B" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 13"/>
+          <g transform="translate(250 10)"><g class="orbit"><use href="#bs-cloud" width="200" height="150"/><use href="#bs-bolt" class="bs-bolt" style="animation-delay:-1.5s" width="200" height="150"/></g></g>
+          <g transform="translate(310 205)"><g class="orbit o2"><use href="#bs-cloud" width="190" height="142"/><use href="#bs-bolt" class="bs-bolt" style="animation-delay:-4s" width="190" height="142"/></g></g>
+          <g transform="translate(500 150)"><g class="orbit o3"><use href="#bs-cloud" width="200" height="150"/><use href="#bs-bolt" class="bs-bolt" style="animation-delay:-6.2s" width="200" height="150"/></g></g>
+          <g fill="none" stroke="#1B1B1B" stroke-width="2.6" stroke-linecap="round">
+            <path d="M236 54 q-26 40 6 84" marker-end="url(#bs-arrow)"/>
+            <path d="M296 330 q-24 -34 8 -76" marker-end="url(#bs-arrow)"/>
+            <path d="M708 196 q20 34 -8 78" marker-end="url(#bs-arrow)"/>
+          </g>
+          <use href="#bs-palm" x="100" y="266" width="46" height="60"/>
+          <use href="#bs-palm" x="618" y="76" width="46" height="60"/>
+          <use href="#bs-princess" x="702" y="46" width="42" height="64"/>
+          <g>
+            <ellipse cx="728" cy="24" rx="30" ry="13" fill="#fff" stroke="#1B1B1B" stroke-width="2.4"/>
+            <path d="M716 34 l-2 12 l12 -9" fill="#fff" stroke="#1B1B1B" stroke-width="2.4" stroke-linejoin="round"/>
+            <text class="bs-hand" x="728" y="30" font-size="17" text-anchor="middle" fill="#1B1B1B">Help!</text>
+          </g>
+          <g stroke="#1B1B1B" stroke-width="3.2" fill="none"><circle cx="68" cy="330" r="10"/><circle cx="686" cy="102" r="10"/></g>
+          <circle cx="68" cy="330" r="3.4" fill="#1B1B1B"/><circle cx="686" cy="102" r="3.4" fill="#1B1B1B"/>
+          <text class="bs-hand" x="30" y="344" font-size="32" fill="#1B1B1B">A</text>
+          <text class="bs-hand" x="686" y="36" font-size="32" fill="#1B1B1B" text-anchor="middle">B</text>
+          <g transform="translate(150 196)"><g class="bob"><use href="#bs-boat" width="104" height="92"/></g></g>
+        </svg>
+      </figure>
+    </header>
+
+    <nav class="bsp-nav" aria-label="Proposal sections"><a href="#p1">1 BrainSail</a><a href="#p2">2 Case study</a><a href="#p3">3 AI insights</a><a href="#p4">4 Narrative</a><a href="#p5">5 Player journey</a><a href="#p6">6 Style and sound</a><a href="#p7">7 Build plan</a></nav>
+
+    <section class="bsp-sec" id="p1" aria-labelledby="h-p1">
+      <div class="bsp-head"><span class="bsp-num">1</span><div><h2 id="h-p1">Welcome to the world of BrainSail</h2></div></div>
+      <div class="bsp-two">
+        <div>
+          <p class="bsp-big"><b>BrainSail</b> is a small web game about sailing a boat across a sea map to rescue a stranded princess.</p>
+          <p>Storm clouds loop in circles between the boat at point A and the island at point B. You steer with the arrow keys and try to dodge them. When one hits, a <span class="bs-hl">Brainstorm</span> opens: you get a problem and a few random words, and you use one word to spark a new, creative solution before the clock runs out. Then you decide if your answer is clear. If it is, the storm calms and you sail on. If not, the boat sinks and the level starts again.</p>
+        </div>
+        <div class="bsp-card">
+          <p class="bs-k" style="margin-top:0">The player's experience</p>
+          <p>Playful first, then a little pressure, then a small "oh!" when a silly word turns into a real idea. Three levels: more storms, less time, and fewer words to choose from.</p>
+          <p class="bs-k">Working title</p>
+          <p>BrainSail. Sail your brain around the storms.</p>
+        </div>
+      </div>
+      <div class="bsp-card" style="margin-top:1.4rem">
+        <h3>Why this game</h3>
+        <p>BrainSail is about <span class="bs-hl">Hallucination</span>, which I define as believing there is only one way, or the traditional way, to solve a problem. The main idea is <span class="bs-hl">lateral thinking</span>, Edward de Bono's name for looking at a problem from a new angle instead of going straight down the usual path. Each storm is one rep, and the game is built to develop those lateral thinking muscles.</p>
+        <p>Fun and play come first. Everything on this page, the lines, the colors, the motion, and the sounds, is chosen so a player under pressure still feels like they are playing, not being tested.</p>
+      </div>
+    </section>
+    <section class="bsp-sec" id="p2" aria-labelledby="h-p2">
+      <div class="bsp-head"><span class="bsp-num">2</span><div><h2 id="h-p2">My Case Study</h2></div></div>
+      <div class="bsp-card bsp-case">
+        <div>
+          <h3>Hide and Luig</h3>
+          <p>A free, hand-drawn point-and-click hide-and-seek game that runs in the browser. You uncover where Luig has hidden, level by level, by finding objects that unlock the next step. It is short, funny, and easy to replay, which made it a good game to study closely.</p>
+          <p><a class="bsp-btn" href="https://dialobic.itch.io/hide-luig">Play Hide and Luig on itch.io</a></p>
+        </div>
+        <div>
+          <p class="bs-k" style="margin-top:0">Credits</p>
+          <p>Made by <b>Dialobic</b>, the only credit on the game page. Built with Phaser (HTML5). The page does not credit sound or music for this game. Later Luig games credit others: <a href="https://dialobic.itch.io/winter-and-luig">Winter and Luig</a> lists music and sounds by Gwen Mollo, and <a href="https://dialobic.itch.io/strange-and-luig">Strange and Luig</a> lists Nativica.</p>
+          <p class="bs-k">Sources</p>
+          <p class="bsp-links"><a href="https://dialobic.itch.io/hide-luig">Official page</a> <a href="https://dialobic.itch.io/hide-luig/devlog">Devlog</a> <a href="https://phaser.io/news/2026/02/hide-and-luig">Phaser news</a> <a href="https://dialobic.itch.io/winter-and-luig">Winter and Luig</a> <a href="https://dialobic.itch.io/strange-and-luig">Strange and Luig</a> <a href="https://dialobic.itch.io/pigs-and-luig/devlog">Pigs and Luig devlog</a></p>
+        </div>
+      </div>
+
+      <p class="bsp-legend"><span class="bsp-tag t-src">Creator statement</span> what the maker says, with a link <span class="bsp-tag t-obs">My observation</span> what I saw, heard, and did <span class="bsp-tag t-int">My interpretation</span> what I think it means</p>
+
+      <h3 class="bsp-sub">Three meaningful moments</h3>
+      <div class="bsp-moments"><article class="bsp-card bsp-moment"><figure class="bsp-fig"><img src="assets/hal-moment1-door.jpg" alt="A yellow outhouse door with a plant, a pumpkin hanging above, a red arrow, and a clippers icon in the corner." loading="lazy"><figcaption>Screenshot from Hide and Luig by Dialobic</figcaption></figure><h3>Moment 1: stuck, then the clippers</h3><dl><dt>Where was I?</dt><dd>When I learned the clippers cut the pumpkin, because for a few seconds I was stuck.</dd><dt>What I saw and heard</dt><dd>A door, plants, a fly, clippers, a pumpkin, a red arrow, a cat. Ethereal sounds that told me I had done something right.</dd><dt>What I did</dt><dd>I clicked the fly and it flew to the top left. I clicked around for any feedback and got nothing, until I clicked the ball at the top and heard a new sound that felt like success. I went through the left red arrow to the back of the outdoor closet, sent the fly back, and clicked the cat, which moved toward it. A box in the bottom right gave me clippers. At the front again, I clipped the pumpkin, it fell, and a hidden key was there. The key opens the door, where Luig is, and clicking him wins the level.</dd><dt>What changed</dt><dd>The angle of the scene changed, and the fly, cat, and pumpkin moved around.</dd><dt>What seemed possible</dt><dd>That if I kept clicking, I would figure it out.</dd><dt>What I understood</dt><dd>How to get the key to find Luig.</dd></dl></article><article class="bsp-card bsp-moment"><figure class="bsp-fig"><img src="assets/hal-moment2-luig.jpg" alt="The outhouse door open, with a pale figure sitting on a toilet inside." loading="lazy"><figcaption>Screenshot from Hide and Luig by Dialobic</figcaption></figure><h3>Moment 2: the door opens on Luig</h3><dl><dt>Where was I?</dt><dd>The end of the level. I click the keyhole, the door opens, and Luig is sitting on a toilet!</dd><dt>What I saw and heard</dt><dd>Luig, sitting on a toilet inside the open door, in the same warm hand-drawn style.</dd><dt>What I did</dt><dd>I found the key inside the pumpkin with the clippers, then opened the door.</dd><dt>What changed</dt><dd>It was like a flipbook, where the animation unfolds as you click through.</dd><dt>What seemed possible</dt><dd>That I would win the level and move on to the next one!</dd><dt>What I understood</dt><dd>You have to find the key, or something, to reveal where Luig is hiding. The title made much more sense after this.</dd></dl></article><article class="bsp-card bsp-moment"><figure class="bsp-fig"><img src="assets/hal-moment3-robot.jpg" alt="A tall teal and tan robot standing in an orange room with a red arrow on the left." loading="lazy"><figcaption>Screenshot from Hide and Luig by Dialobic</figcaption></figure><h3>Moment 3: the beautiful robot</h3><dl><dt>Where was I?</dt><dd>Revealing the next level with the beautiful robot.</dd><dt>What I saw and heard</dt><dd>A majestic robot in front of me.</dd><dt>What I did</dt><dd>I clicked around to find the next item to grab so I could eventually find Luig.</dd><dt>What changed</dt><dd>The level changed.</dd><dt>What seemed possible</dt><dd>That hidden objects would be inside the robot's arms or legs.</dd><dt>What I understood</dt><dd>There is comedy in this game. One reveal inside the robot was a chicken sitting on a ball for a bonus point, and another was clicking the robot's behind to reveal an object I needed to move forward.</dd></dl></article></div>
+
+      <h3 class="bsp-sub">Five player-action events, in the robot level</h3>
+      <div class="bsp-scroll"><table class="bsp-table"><thead><tr><th scope="col">Event</th><th scope="col">Player action</th><th scope="col">Game response</th><th scope="col">What I understood</th></tr></thead><tbody><tr><th scope="row">1<span>Finding the first object</span></th><td>I clicked around until something opened and revealed an object to keep.</td><td>It responded smoothly.</td><td>If you grab an object, you are on the right track.</td></tr><tr><th scope="row">2<span>Finding the next object</span><img class="bsp-th-img" src="assets/hal-event3-ear-wide.jpg" alt="The robot's head and its left ear that looks like a headphone." loading="lazy"></th><td>After clicking around for a while, I realized the left ear, which looks like a headphone, was where the object I picked up earlier was to be placed.</td><td>It responded with a sound.</td><td>Try, try, try until you get it right.</td></tr><tr><th scope="row">3<span>Turning the ear</span><img class="bsp-th-img" src="assets/hal-event3-ear.jpg" alt="A close-up of the ear with two curved arrows on it." loading="lazy"></th><td>I noticed arrows on the left ear that let me move it forward or backward. I clicked them until something happened, but nothing did.</td><td>No sound.</td><td>I did not know what the "password" was.</td></tr><tr><th scope="row">4<span>The leg panel</span><img class="bsp-th-img" src="assets/hal-event4-panel.jpg" alt="A panel on the robot's leg with four numbered dials." loading="lazy"><img class="bsp-th-img" src="assets/hal-event4-mouth.jpg" alt="The robot's head with its mouth open and an object collected in the corner." loading="lazy"></th><td>I went to the leg and found a numbered panel. This is what I was looking for.</td><td>Success: I got to open the robot's mouth and reveal the next object.</td><td>If you are stuck, keep looking.</td></tr><tr><th scope="row">5<span>Using the object on the leg</span><img class="bsp-th-img" src="assets/hal-event5-leg.jpg" alt="The back of the robot's leg with a small compartment open and cables inside." loading="lazy"></th><td>I realized the object I picked up from the ear had to be used somewhere, and used it on the back of the leg.</td><td>A wonderful sound, and a compartment opened to reveal the next object.</td><td>Everything is connected, and you have to be patient to reveal the next step.</td></tr></tbody></table></div>
+
+      <div class="bsp-card" style="margin-top:1.6rem">
+        <h3>What I learned from the research</h3>
+        <ul class="bsp-list">
+          <li><span class="bsp-tag t-src">Creator statement</span> The maker frames the game as a hide-and-seek adventure and an absurd journey of curiosity and surprise (<a href="https://dialobic.itch.io/hide-luig">official page</a>).</li>
+          <li><span class="bsp-tag t-obs">My observation</span> I thought it was an object-chain puzzle: the fly, the cat, the clippers, the pumpkin, the key. I only saw the hide-and-seek once the door opened on Luig.</li>
+          <li><span class="bsp-tag t-int">My interpretation</span> Sound is the feedback language. A new sound meant I was right, and silence at the ear meant not yet. I think the maker wanted me to feel playful, curious, like an explorer, and to laugh.</li>
+          <li><span class="bsp-tag t-src">Creator statement</span> The one-item inventory is on purpose. A devlog for a later game says it forces planning and backtracking (<a href="https://dialobic.itch.io/strange-and-luig/devlog">Strange and Luig devlog</a>). I did not confirm it for these levels.</li>
+          <li><span class="bsp-tag t-obs">My observation</span> The bonus counter shows a second, optional goal: collect the bonus balls. One sat under a chicken inside the robot.</li>
+          <li>I wondered whether Luig is a spin on Luigi from Super Mario Bros., but I found no source supporting that connection. The <a href="#luig-name-check">evidence audit</a> records it as unverified.</li>
+        </ul>
+      </div>
+    </section>
+    <section class="bsp-sec" id="p3" aria-labelledby="h-p3">
+      <div class="bsp-head"><span class="bsp-num">3</span><div><h2 id="h-p3">My Critical Discussion with AI</h2></div></div>
+      <h3 class="bsp-sub">What AI found, and what I verified</h3>
+      <div class="bsp-scroll"><table class="bsp-table bsp-ver"><thead><tr><th scope="col">Claim</th><th scope="col">Where I checked</th><th scope="col">Status</th></tr></thead><tbody>
+        <tr><td>A hide-and-seek adventure about uncovering where Luig hides, an absurd journey of curiosity and surprise.</td><td><a href="https://dialobic.itch.io/hide-luig">Official page</a></td><td><span class="bsp-tag t-src">Verified</span></td></tr>
+        <tr><td>Made by Dialobic with Phaser, tagged Point and Click and Surreal.</td><td><a href="https://dialobic.itch.io/hide-luig">Official page</a></td><td><span class="bsp-tag t-src">Verified</span></td></tr>
+        <tr><td>Luig is a series: Pigs and Luig is the third chapter.</td><td><a href="https://dialobic.itch.io/pigs-and-luig/devlog">Pigs and Luig devlog</a></td><td><span class="bsp-tag t-src">Verified</span></td></tr>
+        <tr><td>The one-item inventory is deliberate and forces planning and backtracking.</td><td><a href="https://dialobic.itch.io/strange-and-luig/devlog">Strange and Luig devlog</a></td><td><span class="bsp-tag t-obs">Verified for a sequel, not for my levels</span></td></tr>
+        <tr><td>An observation game with surreal, absurd hiding spots.</td><td><a href="https://phaser.io/news/2026/02/hide-and-luig">Phaser news</a></td><td><span class="bsp-tag t-obs">Outside source, not the creator</span></td></tr>
+        <tr><td>Who made the sound and music for Hide and Luig.</td><td>No source found</td><td><span class="bsp-tag t-int">Could not verify</span></td></tr>
+        <tr id="luig-name-check"><td>Luig is a spin on Luigi.</td><td>No source found</td><td><span class="bsp-tag t-int">Could not verify</span></td></tr>
+        <tr><td>The release date.</td><td><a href="https://www.bontegames.com/2025/09/hide-and-luig-browser.html">A Sept 2025 blog post</a> and a Dec 2025 first devlog disagree</td><td><span class="bsp-tag t-int">Could not verify</span></td></tr>
+      </tbody></table></div>
+
+      <h3 class="bsp-sub">Two gaps I found in the AI's first reading</h3>
+      <div class="bsp-grid2">
+        <article class="bsp-card"><span class="bsp-tag t-obs">Gap 1: Perspective</span>
+          <p>The AI assumed the player knows from the start that they are hunting for Luig. My notes say otherwise: I thought it was an object-chain puzzle, and the title only made sense after the door opened.</p>
+          <p class="bsp-q">My challenge to the AI is in the exchange below.</p></article>
+        <article class="bsp-card"><span class="bsp-tag t-obs">Gap 2: Interaction</span>
+          <p>The AI said the only goal is to find Luig. I found a second goal: the bonus balls, with a counter in the corner. The AI never asked what that second goal teaches.</p>
+          <p class="bsp-q">"You said the only goal is to find Luig. That's not what I experienced. I clicked a ball and heard a new sound that told me I'd done something good, and a bonus counter showed up in the corner. Later, a chicken in the robot was sitting on a ball, and clicking it gave me a bonus point. So there is a second goal, finding the balls. What does a player learn from that second goal? How does it change the way I explore each scene?"</p></article>
+      </div>
+
+      <h3 class="bsp-sub">A short exchange, selected</h3>
+      <div class="bsp-chat">
+        <div class="bsp-bub me"><b>Me</b><p>You described this game as a hide-and-seek where the player knows they are looking for Luig. That's not how it went for me. I thought I was solving a chain of puzzles with the fly, the cat, the clippers, the pumpkin, and the key. I didn't realize it was hide-and-seek until the door opened on Luig, and then the title finally made sense! The creator's devlog also says the one-item inventory forces planning and backtracking, which sounds like puzzle design to me. Please reconsider your reading using my observation and that source. What are two possible interpretations, and what evidence supports each? What evidence might weaken each, and what else should I look for in the game to decide?</p></div>
+        <div class="bsp-bub ai"><b>AI</b>
+          <p>You're right, and the miss was real. My first reading assumed the player knows the goal from the start, and your notes show the opposite.</p>
+          <p><b>Reading A: a hide-and-seek game dressed as a puzzle chain.</b> For: the creator frames it as hide-and-seek, each level ends in a comic reveal of Luig, and the title names the goal. Against: Luig does not appear until the end, and most of your play was object chaining.</p>
+          <p><b>Reading B: an object-chain puzzle that hides its goal until the end.</b> For: your five linked steps and the dead end at the ear, plus the single item slot and the devlog about one-item inventories. Against: that devlog is about a sequel, and the creator describes the game as hide-and-seek, not a puzzle.</p>
+          <p>To decide, look for anything before the reveal that hints Luig is the target, check what the HELP button says, test whether you can hold two items, and ask a friend to play cold and say what they think the goal is.</p></div>
+        <div class="bsp-bub me"><b>Me, after thinking it over</b><p>Both readings can be true, in order. The first time through it is an object-chain puzzle, and the reveal flips it into hide-and-seek.</p></div>
+      </div>
+
+      <h3 class="bsp-sub">Three viewpoints, and the one that fit me</h3>
+      <p>I asked the AI to play as a child, a game designer, and an artist. The designer saw a puzzle system and the artist saw a hand-drawn world that keeps you gentle even when you are stuck. The child's view felt closest to me.</p>
+      <p class="bsp-q">"It's important the purpose for a game first and foremost to be fun, allow play to happen, and engaging to use. I have worked with kids before and they can be truly honest about that."</p>
+
+      <div class="bsp-card" style="margin-top:1.4rem">
+        <h3>How the discussion changed my thinking</h3>
+        <dl class="bsp-dl">
+          <dt>What did AI help me notice?</dt><dd>It helped provide more details faster from other sources, so I could do better pattern recognition, such as noticing that much of the experience is about sound and keeping it simple, one item at a time.</dd>
+          <dt>What did I challenge or correct?</dt><dd>The AI assumed the goal was obvious and that finding Luig was the only goal. I showed with my notes that I did not know the goal until the reveal, and that the bonus balls were a second goal.</dd>
+          <dt>What is my own conclusion?</dt><dd>Fun and play come first. A child would laugh at the chicken and chase the sounds before ever asking what the goal is. The meaning arrives after the play.</dd>
+          <dt>How will I use this?</dt><dd>In BrainSail the player starts by sailing and dodging, and the lateral thinking arrives through play: a random word that seems silly turns out to hold a real answer. I am also keeping what worked in Hide and Luig, a clear sound when you are right, a kind silence when you are not, and humor as the reward.</dd>
+        </dl>
+      </div>
+    </section>
+    <section class="bsp-sec" id="p4" aria-labelledby="h-p4">
+      <div class="bsp-head"><span class="bsp-num">4</span><div><h2 id="h-p4">The Narrative and Concept</h2></div></div>
+      <div class="bsp-grid2">
+        <article class="bsp-card"><h3>My interpretation of Hallucination</h3>
+          <p>To me, a hallucination is believing there is only one way, or the traditional way, to solve a problem. It feels real, so we rarely question it. This game asks the player to question it.</p></article>
+        <article class="bsp-card"><h3>The game world</h3>
+          <p>You are sailing a small boat across a sea map, from point A to point B, where a princess is stranded on a palm-tree island waving for help. At first the water is calm. Then storms begin circling in the way. If a storm hits the boat, you have to solve its problem before time runs out, or the boat sinks.</p></article>
+        <article class="bsp-card"><h3>The player's role</h3>
+          <p>You are the hero in the boat, and your tool is lateral thinking. When a storm hits, a <b>Brainstorm</b> opens. The game gives you a random problem from a bank of problems and random words from a bank of words. You choose <b>one</b> word and use it to stimulate a new, creative solution before the timer ends. Both banks are random, so every playthrough is different.</p>
+          <p>When time is up, the game asks, "Is your answer clear?" and you choose yes or no. Yes calms the storm and you sail on toward B. No sinks the boat, and the same level starts again with a new problem and new words.</p></article>
+        <article class="bsp-card"><h3>The experience I want to create</h3>
+          <p>I want the player to feel the pressure of the storm, then the relief of a solution that came from an unexpected place. I hope they carry away practice in lateral thinking, and the sense that a random, even silly, word can hold a real answer.</p></article>
+      </div>
+
+      <h3 class="bsp-sub">Three levels</h3>
+      <div class="bsp-scroll"><table class="bsp-table"><thead><tr><th scope="col">Level</th><th scope="col">Storms</th><th scope="col">Words offered</th><th scope="col">Time</th></tr></thead><tbody>
+        <tr><th scope="row">1</th><td>3</td><td>3, you pick 1</td><td>1:30</td></tr>
+        <tr><th scope="row">2</th><td>4</td><td>2, you pick 1</td><td>1:00</td></tr>
+        <tr><th scope="row">3</th><td>7</td><td>1, no choice</td><td>0:30</td></tr>
+      </tbody></table></div>
+
+      <div class="bsp-card" style="margin-top:1.4rem">
+        <h3>How my references informed it</h3>
+        <ul class="bsp-list">
+          <li><b>Hide and Luig</b> reminded me that play comes first. Its hand-drawn scenes kept me playful even when I was stuck, sound told me I was right, and a surprise reveal was the reward. BrainSail's random word is my chicken sitting on a ball: a silly surprise that is secretly the answer.</li>
+          <li><b>Machinarium and Windosill</b> are why the sea is hand-drawn, quiet, and a little surreal.</li>
+          <li><b>The overworld maps of classic SNES games</b> are why the whole game is one map you steer across, with islands, wavy water, and a dotted route from A to B.</li>
+          <li><b>De Bono's lateral thinking</b> is the skill. The random word is his random-entry idea turned into a game.</li>
+        </ul>
+      </div>
+    </section>
+    <section class="bsp-sec" id="p5" aria-labelledby="h-p5">
+      <div class="bsp-head"><span class="bsp-num">5</span><div><h2 id="h-p5">The Interaction and Player Journey</h2></div></div>
+      <h3 class="bsp-sub">The flowchart</h3>
+      <figure class="bsp-frame2"><svg viewBox="0 0 760 740" role="img" aria-label="Flowchart of one level of BrainSail. The level starts with the boat at A. The player steers toward B. If a storm hits, a Brainstorm screen opens with a problem and random words. The player types an idea while the clock runs. When time is up the game asks if the answer is clear. Yes calms the storm and the player sails on. No sinks the boat and the same level restarts. Reaching B rescues the princess and completes the level."><g><rect x="160" y="20" width="260" height="56" rx="12" class="fc-paper" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="290" y="44" text-anchor="middle">Level starts</text><text class="bsp-ts" x="290" y="63" text-anchor="middle">Boat begins at A</text></g><g><rect x="160" y="112" width="260" height="56" rx="12" class="fc-sea" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="290" y="136" text-anchor="middle">Steer toward B</text><text class="bsp-ts" x="290" y="155" text-anchor="middle">Arrow keys, dodge the storms</text></g><g><rect x="160" y="204" width="260" height="56" rx="12" class="fc-sea" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="290" y="228" text-anchor="middle">Hit or reach B?</text><text class="bsp-ts" x="290" y="247" text-anchor="middle">Checked as you sail</text></g><g><rect x="160" y="296" width="260" height="56" rx="12" class="fc-sun" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="290" y="320" text-anchor="middle">A Brainstorm hits!</text><text class="bsp-ts" x="290" y="339" text-anchor="middle">A second screen opens</text></g><g><rect x="160" y="388" width="260" height="56" rx="12" class="fc-sun" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="290" y="412" text-anchor="middle">Problem and random words</text><text class="bsp-ts" x="290" y="431" text-anchor="middle">Pulled from the banks</text></g><g><rect x="160" y="480" width="260" height="56" rx="12" class="fc-sun" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="290" y="504" text-anchor="middle">Type your creative idea</text><text class="bsp-ts" x="290" y="523" text-anchor="middle">Use one word, beat the clock</text></g><g><rect x="160" y="572" width="260" height="56" rx="12" class="fc-sun" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="290" y="596" text-anchor="middle">Time's up!</text><text class="bsp-ts" x="290" y="615" text-anchor="middle">Is your answer clear? Yes or no</text></g><g><rect x="160" y="664" width="260" height="56" rx="12" class="fc-paper" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="290" y="688" text-anchor="middle">Boat sinks</text><text class="bsp-ts" x="290" y="707" text-anchor="middle">Same level restarts</text></g><g><rect x="520" y="204" width="200" height="56" rx="12" class="fc-paper" stroke="#1B1B1B" stroke-width="3"/><text class="bsp-th" x="620" y="228" text-anchor="middle">Princess rescued!</text><text class="bsp-ts" x="620" y="247" text-anchor="middle">Level complete</text></g><line x1="290" y1="76" x2="290" y2="110" class="bsp-ar" marker-end="url(#bs-arrow)"/><line x1="290" y1="168" x2="290" y2="202" class="bsp-ar" marker-end="url(#bs-arrow)"/><line x1="290" y1="260" x2="290" y2="294" class="bsp-ar" marker-end="url(#bs-arrow)"/><line x1="290" y1="352" x2="290" y2="386" class="bsp-ar" marker-end="url(#bs-arrow)"/><line x1="290" y1="444" x2="290" y2="478" class="bsp-ar" marker-end="url(#bs-arrow)"/><line x1="290" y1="536" x2="290" y2="570" class="bsp-ar" marker-end="url(#bs-arrow)"/><line x1="290" y1="628" x2="290" y2="662" class="bsp-ar" marker-end="url(#bs-arrow)"/><line x1="420" y1="232" x2="518" y2="232" class="bsp-ar" marker-end="url(#bs-arrow)"/><text class="bsp-ts" x="302" y="288">Storm hits</text><text class="bsp-ts" x="302" y="656">No, or not clear</text><text class="bsp-ts" x="469" y="222" text-anchor="middle">Reach B</text><path d="M160 600 L108 600 L108 140 L158 140" fill="none" class="bsp-ar" marker-end="url(#bs-arrow)"/><text class="bsp-ts" x="124" y="588">Yes</text><path d="M160 692 L52 692 L52 48 L158 48" fill="none" class="bsp-ar" marker-end="url(#bs-arrow)"/><text class="bsp-ts" transform="translate(38 380) rotate(-90)" text-anchor="middle">same level, new problem and words</text><g transform="translate(520 330)"><rect width="16" height="16" rx="4" class="fc-sea" stroke="#1B1B1B" stroke-width="2"/><text class="bsp-ts" x="26" y="13">Sailing</text><rect y="28" width="16" height="16" rx="4" class="fc-sun" stroke="#1B1B1B" stroke-width="2"/><text class="bsp-ts" x="26" y="41">Solving the Brainstorm</text><rect y="56" width="16" height="16" rx="4" class="fc-paper" stroke="#1B1B1B" stroke-width="2"/><text class="bsp-ts" x="26" y="69">Start, end, or fail</text></g></svg><figcaption>One level of BrainSail. A solved storm is not the end of the level: the boat keeps sailing toward B, and can be hit again.</figcaption></figure>
+
+      <h3 class="bsp-sub">The journey in five beats</h3>
+      <ol class="bsp-beats">
+        <li><b>Opening: Enter.</b> A calm sea, a small boat at A, a stranded princess waving from B, and storm clouds drifting in circles between them. The clouds are the first clue, and they invite the player to steer around them.</li>
+        <li><b>Stage 1: Notice.</b> The first action is getting hit. A Brainstorm opens with a problem, three random words, a 1:30 clock, and a box to type in. The player learns that a hit is a problem to solve, not the end, and that a random word can open a new way in.</li>
+        <li><b>Stage 2: Explore.</b> The same action has a new consequence: two words, one minute, four storms. The player already trusts that a word can work, and now has to trust it with less choice and less time.</li>
+        <li><b>Stage 3: Reconsider.</b> Seven storms, one word, thirty seconds. With no choice of word, the familiar approach is gone. This is where the player discovers the "one right way" belief was the hallucination.</li>
+        <li><b>Ending: Leave.</b> The boat reaches B on calm water and the princess is rescued. The final thought is that a random word held a real answer. The player can sail again with new problems and words.</li>
+      </ol>
+
+      <h3 class="bsp-sub">The storyboard, drawn by hand with Sharpies</h3>
+      <div class="bsp-boards"><article class="bsp-card bsp-frame"><h3>Frame 1: Entry <small>Opening, Enter</small></h3><div class="bsp-pair one"><figure class="bsp-fig"><img src="assets/sketch-6621.jpg" alt="Hand-drawn sketch: a boat at A, three storm clouds with curved arrows showing their loops, B in the top right, and four keypad triangles at the bottom right." loading="lazy"><figcaption>Part 1: the sea map, with keypad controls</figcaption></figure></div><ul class="bsp-list tight"><li><b>Goal</b> Sail from A to B.</li><li><b>Input</b> Left, up, right, and down keys, or the on-screen triangles.</li><li><b>Feedback</b> The storms keep circling, so the danger is visible before anything happens.</li><li><b>Continues</b> Keep sailing until a storm hits or I reach B.</li></ul></article><article class="bsp-card bsp-frame"><h3>Frame 2: First action <small>Stage 1, Notice</small></h3><div class="bsp-pair"><figure class="bsp-fig"><img src="assets/sketch-6622.jpg" alt="Hand-drawn sketch: the boat inside a storm cloud with lightning marks around it, two other clouds circling nearby." loading="lazy"><figcaption>Part 1: a storm hits the boat</figcaption></figure><figure class="bsp-fig"><img src="assets/sketch-6623.jpg" alt="Hand-drawn sketch of the Brainstorm screen: a timer bar of 1 minute 30 seconds, the problem "People are not attending the library", a solution box, and the random words love, book, wisdom." loading="lazy"><figcaption>Part 2: the Brainstorm screen</figcaption></figure></div><ul class="bsp-list tight"><li><b>Goal</b> Survive the hit, then keep going toward B.</li><li><b>Input</b> Pick one of the three words and type a solution.</li><li><b>Feedback</b> The timer bar counts down. At the end the game asks, "Is your answer clear?"</li><li><b>Continues</b> Yes calms the storm and the boat sails on. No sinks the boat and the level restarts.</li><li><b>What I understand</b> A random word can open a new way into a problem.</li></ul></article><article class="bsp-card bsp-frame"><h3>Frame 3: New response <small>Stage 2, Explore</small></h3><div class="bsp-pair"><figure class="bsp-fig"><img src="assets/sketch-6624.jpg" alt="Hand-drawn sketch: four storm clouds close together with the boat inside one of them." loading="lazy"><figcaption>Part 1: four storms, and the boat is hit</figcaption></figure><figure class="bsp-fig"><img src="assets/sketch-6625.jpg" alt="Hand-drawn sketch of the Brainstorm screen: a timer of 1 minute, the problem "Too much trash is left on the streets", a solution box, and two random words." loading="lazy"><figcaption>Part 2: less time, fewer words</figcaption></figure></div><ul class="bsp-list tight"><li><b>What changes</b> One fewer word, a shorter clock, and one more storm.</li><li><b>How I notice</b> The screen shows it: fewer word cards, a faster timer, more clouds.</li><li><b>Continues</b> Same loop. After a solved storm the boat sails on and can be hit again.</li></ul></article><article class="bsp-card bsp-frame"><h3>Frame 4: Discovery <small>Stage 3, Reconsider</small></h3><div class="bsp-pair"><figure class="bsp-fig"><img src="assets/sketch-6626.jpg" alt="Hand-drawn sketch: seven storm clouds crowded around the boat." loading="lazy"><figcaption>Part 1: seven storms</figcaption></figure><figure class="bsp-fig"><img src="assets/sketch-6627.jpg" alt="Hand-drawn sketch of the Brainstorm screen: a 30 second timer, the problem "Kids addicted to social media", a solution box, and one random word, butterfly." loading="lazy"><figcaption>Part 2: one word, thirty seconds</figcaption></figure></div><ul class="bsp-list tight"><li><b>What changes</b> There is no choice of word, so the usual approach is gone.</li><li><b>How it develops Hallucination</b> The "one right way" is gone. I have to use the one odd word I am given, and I discover it can still hold a real answer.</li><li><b>Continues</b> Sail on, or the boat sinks and the level restarts.</li></ul></article></div>
+
+      <h3 class="bsp-sub">My level planning sheet</h3>
+      <figure class="bsp-fig wide"><img src="assets/sketch-6620.jpg" alt="Hand-drawn planning sheet with three panels. Level 1: love, book, wisdom, 1.5 minutes, three storms. Level 2: lemons, cookie, 1 minute, four storms. Level 3: butterfly, 30 seconds, seven storms." loading="lazy"><figcaption>Each level changes three dials at once: storms, words, and time.</figcaption></figure>
+    </section>
+    <section class="bsp-sec bsp-sec6" id="p6" aria-labelledby="h-p6">
+      <div class="bsp-head"><span class="bsp-num">6</span><div><h2 id="h-p6">The Style and Sound Guide</h2></div></div>
+    
+<section class="bs-row" aria-labelledby="bs-h-visual">
+      <div>
+        <h2 id="bs-h-visual">Visual</h2>
+        <span class="bs-name">Hand-drawn Sharpie on paper</span>
+        <p class="bs-k">What I chose</p>
+        <p>Black outlines, scribbled storm clouds that flash with lightning, a small green boat, and A and B marked with dots. The whole game is a sea map you steer across, like the overworld maps in classic SNES games such as Super Mario World and Donkey Kong Country, with wavy water lines all over the sea. A hero rides the boat. A princess waits on the island at B, waving for help. Palm trees stand on both islands.</p>
+        <p class="bs-k">Why</p>
+        <p>A hand-drawn world feels like play, not a test, so solving problems under pressure stays fun. The clouds are readable at a glance.</p>
+      </div>
+      <div class="bs-demo">
+        <div class="bs-chips">
+          <div class="bs-chip"><i style="background:#1B1B1B"></i><div><b>Ink</b><span>Every outline, like Sharpie on paper</span></div></div>
+          <div class="bs-chip"><i style="background:#FBF8F1"></i><div><b>Paper</b><span>The world, warm and folded</span></div></div>
+          <div class="bs-chip"><i style="background:#4FA3C7"></i><div><b>Sea blue</b><span>Water, rain, and the princess's gown</span></div></div>
+          <div class="bs-chip"><i style="background:#F7D154"></i><div><b>Sun yellow</b><span>Lightning, her crown, and the word you pick</span></div></div>
+          <div class="bs-chip"><i style="background:#3C9D57"></i><div><b>Boat green</b><span>You and your sail. The green hat for creative thinking, and the only green thing on screen</span></div></div>
+        </div>
+        <div class="bs-cast" aria-label="The cast">
+          <figure><svg viewBox="0 0 90 80" aria-hidden="true"><use href="#bs-boat" width="90" height="80"/></svg>The hero and the boat</figure>
+          <figure><svg viewBox="0 0 60 92" aria-hidden="true"><use href="#bs-princess" width="60" height="92"/></svg>The stranded princess</figure>
+          <figure><svg viewBox="0 0 64 84" aria-hidden="true"><use href="#bs-palm" width="64" height="84"/></svg>Palm trees on A and B</figure>
+          <figure><svg viewBox="0 0 160 120" aria-hidden="true"><use href="#bs-cloud" width="160" height="120"/><use href="#bs-bolt" width="160" height="120"/></svg>A storm with lightning</figure>
+        </div>
+        <div class="bs-type">
+          <div><strong style="font-family:var(--hand)">Aa</strong>Gochi Hand for titles and anything the player writes</div>
+          <div><strong style="font-family:'Nunito',sans-serif;font-weight:600">Aa</strong>Nunito for instructions and small print</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bs-row" aria-labelledby="bs-h-interface">
+      <div>
+        <h2 id="bs-h-interface">Interface</h2>
+        <span class="bs-name">One calm screen, big targets</span>
+        <p class="bs-k">What I chose</p>
+        <p>Steer with four keys: left, up, right, and down, drawn as triangles like the arrow keys on a MacBook Air. The storms are big, fast, and loop in wide circles, so getting around them takes timing. When the boat hits a storm, a second screen opens. The instructions sit at the top: use the word to stimulate a new creative solution or idea to tackle the problem. Under them are the problem, three word cards to pick from, and a real box to type in. A ring of marker ticks erases as time runs out. When time is up, the screen says "Time's up! Is your answer clear?" and only then shows the two buttons. The boat is the only green object, so the player always knows where they are.</p>
+        <p class="bs-k">Why</p>
+        <p>The player should understand what to do without instructions.</p>
+      </div>
+      <div class="bs-demo bs-play">
+        <div class="bs-screens" id="bs-screens">
+
+          <div class="bs-screen" id="bs-seascr">
+            <div class="bs-map" id="bs-map" tabindex="0" role="group" aria-label="Sea map. Use the arrow keys to steer the green boat around the storms to the island at point B.">
+              <svg viewBox="0 0 520 380" aria-hidden="true">
+                <rect width="520" height="380" fill="url(#bs-wavepat)"/>
+                <g fill="#FBF8F1" stroke="#1B1B1B" stroke-width="3" stroke-linejoin="round">
+                  <path d="M10 340 C 6 306, 44 292, 84 298 C 124 304, 138 332, 126 354 C 108 374, 38 374, 20 360 Z"/>
+                  <path d="M390 82 C 388 48, 432 30, 470 36 C 504 42, 514 80, 500 100 C 484 120, 404 118, 392 100 Z"/>
+                </g>
+                <use href="#bs-palm" x="84" y="282" width="44" height="58"/>
+                <use href="#bs-palm" x="396" y="62" width="44" height="58"/>
+                <use href="#bs-princess" x="468" y="42" width="38" height="58"/>
+                <g>
+                  <ellipse cx="490" cy="20" rx="26" ry="12" fill="#fff" stroke="#1B1B1B" stroke-width="2.2"/>
+                  <path d="M480 29 l-3 9 l11 -6" fill="#fff" stroke="#1B1B1B" stroke-width="2.2" stroke-linejoin="round"/>
+                  <text class="bs-hand" x="490" y="25" font-size="14" text-anchor="middle" fill="#1B1B1B">Help!</text>
+                </g>
+                <g fill="none" stroke="#1B1B1B" stroke-width="3"><circle cx="62" cy="340" r="9"/><circle cx="452" cy="98" r="9"/></g>
+                <circle cx="62" cy="340" r="3" fill="#1B1B1B"/><circle cx="452" cy="98" r="3" fill="#1B1B1B"/>
+                <text class="bs-hand" x="26" y="350" font-size="24" fill="#1B1B1B">A</text>
+                <text class="bs-hand" x="430" y="30" font-size="24" fill="#1B1B1B" text-anchor="middle">B</text>
+                <g id="bs-mc1" class="bs-mcloud"><g class="bs-mc-in"><use href="#bs-cloud" x="-65" y="-49" width="130" height="98"/><use href="#bs-bolt" class="bs-mbolt" x="-65" y="-49" width="130" height="98"/></g></g>
+                <g id="bs-mc2" class="bs-mcloud"><g class="bs-mc-in"><use href="#bs-cloud" x="-65" y="-49" width="130" height="98"/><use href="#bs-bolt" class="bs-mbolt" x="-65" y="-49" width="130" height="98"/></g></g>
+                <g id="bs-mc3" class="bs-mcloud"><g class="bs-mc-in"><use href="#bs-cloud" x="-65" y="-49" width="130" height="98"/><use href="#bs-bolt" class="bs-mbolt" x="-65" y="-49" width="130" height="98"/></g></g>
+                <g id="bs-mapboat"><g class="bs-mshake"><use href="#bs-boat" x="-42" y="-37" width="84" height="75"/></g></g>
+              </svg>
+              <div class="bs-flashfx" id="bs-flashfx" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <div class="bs-screen is-off" id="bs-solvescr" aria-hidden="true">
+            <div class="bs-solve">
+              <div class="bs-solvehead">
+                <svg viewBox="0 0 160 120" aria-hidden="true"><use href="#bs-cloud" width="160" height="120"/><use href="#bs-bolt" width="160" height="120"/></svg>
+                <h3>A Brainstorm hits!</h3>
+              </div>
+              <p class="bs-instr">Use the word to stimulate a new creative solution or idea to tackle the problem.</p>
+              <div class="bs-mockhead">
+                <svg class="bs-ring" viewBox="0 0 100 100" aria-hidden="true"><g id="bs-ring-ticks"></g><text id="bs-ring-secs" x="50" y="52">30</text></svg>
+                <div class="bs-prob"><b>Problem</b><span id="bs-problem"></span></div>
+              </div>
+              <div class="bs-cards" id="bs-wordcards" role="group" aria-label="Pick one word card"></div>
+              <label class="sr" for="bs-idea">Type your creative solution</label>
+              <textarea id="bs-idea" class="bs-typein" rows="4" maxlength="500" placeholder="Type your creative solution here..."></textarea>
+              <div class="bs-timesup" id="bs-timesup" role="alert" hidden>
+                <b>Time's up! Is your answer clear?</b>
+                <div class="bs-answer">
+                  <button type="button" class="bs-btn is-sea" id="bs-yes">Yes, it's clear</button>
+                  <button type="button" class="bs-btn" id="bs-no">No, not clear</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bs-keys" role="group" aria-label="Steering keys">
+          <button type="button" class="bs-key" data-dir="left" aria-label="Left"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="20,4 4,12 20,20" fill="#1B1B1B" stroke="#1B1B1B" stroke-width="2" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="bs-key" data-dir="up" aria-label="Up"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,4 4,20 20,20" fill="#1B1B1B" stroke="#1B1B1B" stroke-width="2" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="bs-key" data-dir="down" aria-label="Down"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="4,4 20,4 12,20" fill="#1B1B1B" stroke="#1B1B1B" stroke-width="2" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="bs-key" data-dir="right" aria-label="Right"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="4,4 20,12 4,20" fill="#1B1B1B" stroke="#1B1B1B" stroke-width="2" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="bs-playbar">
+          <button type="button" class="bs-btn" id="bs-ambi" aria-pressed="false">Storm sounds: off</button>
+        </div>
+        <p class="bs-status" id="bs-maphint" role="status" aria-live="polite"></p>
+        <small>A playable sketch, not the finished game. Click the map, then use your arrow keys or press the triangles. Steer around the storms to the princess at B. If a storm hits, a second screen opens. The demo clock is 30 seconds, and the real Level 1 clock is 1:30. The problems and words come from a small sample bank.</small>
+      </div>
+    </section>
+
+    <section class="bs-row" aria-labelledby="bs-h-motion">
+      <div>
+        <h2 id="bs-h-motion">Motion</h2>
+        <span class="bs-name">Gentle, then silly</span>
+        <p class="bs-k">What I chose</p>
+        <p>Storms drift in wide, quick loops and flash with lightning. A hit gives a short shake. A solved storm puffs away like an erased scribble. The boat bobs. Sinking is a slow comic tilt with bubbles, not scary.</p>
+        <p class="bs-k">Why</p>
+        <p>Motion shows cause and effect, and keeps failure friendly.</p>
+      </div>
+      <div class="bs-demo">
+        <div class="bs-stage" id="bs-stage">
+          <svg class="bs-waves" viewBox="0 0 400 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 22 q25 -14 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" fill="none" stroke="#4FA3C7" stroke-width="3" stroke-linecap="round"/><path d="M-20 42 q25 -14 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" fill="none" stroke="#4FA3C7" stroke-width="3" stroke-linecap="round" opacity=".6"/></svg>
+          <div class="bs-cloudbox"><svg viewBox="0 0 160 120" aria-hidden="true"><use href="#bs-cloud" width="160" height="120"/><use href="#bs-bolt" class="bs-bolt" style="animation-delay:-2s" width="160" height="120"/></svg></div>
+          <div class="bs-puff" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="bs-boatbox"><div class="in"><svg viewBox="0 0 90 80" role="img" aria-label="A small green sailboat with a hero"><use href="#bs-boat" width="90" height="80"/></svg></div></div>
+          <div class="bs-bubbles" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <div class="bs-ctl">
+          <button type="button" class="bs-btn" data-motion="hit">Storm hits</button>
+          <button type="button" class="bs-btn is-sea" data-motion="solve">Solved</button>
+          <button type="button" class="bs-btn" data-motion="sink">Boat sinks</button>
+          <button type="button" class="bs-btn" data-motion="reset">Start over</button>
+        </div>
+        <small>Press a button to see how the game answers the player.</small>
+      </div>
+    </section>
+
+    <section class="bs-row" aria-labelledby="bs-h-audio">
+      <div>
+        <h2 id="bs-h-audio">Audio</h2>
+        <span class="bs-name">Playful and whimsical</span>
+        <p class="bs-k">What I chose</p>
+        <p>Marimba and ukulele plinks, bubble pops, and a soft water bed. Rain and thunder are the storm ambience: the closer a storm gets, the louder the rain, and every lightning flash comes with a rumble of thunder. A storm arrives with a silly low bloop. The last ten seconds tick like a woodblock. A good answer plays a rising xylophone chime. Sinking is a sliding whistle. Reaching B plays a short jingle.</p>
+        <p class="bs-k">Why</p>
+        <p>Sound confirms success and signals danger, and the calm sea is quiet so storms feel louder.</p>
+      </div>
+      <div class="bs-demo">
+        <div class="bs-audiobar">
+          <button type="button" class="bs-btn" id="bs-mute" disabled>Mute sounds</button>
+          <span class="bs-status" id="bs-status" role="status" aria-live="polite">Sound stays off until you press a Hear it button.</span>
+        </div>
+        <ul class="bs-sounds">
+          <li><div><b>Calm sea</b><span class="d">A soft water bed. Quiet on purpose.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="calm">Hear it</button></li>
+          <li><div><b>Rain</b><span class="d">The storm ambience, soft and steady.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="rain">Hear it</button></li>
+          <li><div><b>Lightning and thunder</b><span class="d">A crack and a long low rumble.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="thunder">Hear it</button></li>
+          <li><div><b>Playful plinks</b><span class="d">Ukulele strum and marimba notes.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="plink">Hear it</button></li>
+          <li><div><b>Storm arrives</b><span class="d">A silly low bloop.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="bloop">Hear it</button></li>
+          <li><div><b>Last ten seconds</b><span class="d">Ticks like a woodblock.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="tick">Hear it</button></li>
+          <li><div><b>Good answer</b><span class="d">A rising xylophone chime.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="good">Hear it</button></li>
+          <li><div><b>Boat sinks</b><span class="d">A sliding whistle and bubble pops.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="sink">Hear it</button></li>
+          <li><div><b>Reach B</b><span class="d">A short jingle.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="jingle">Hear it</button></li>
+          <li><div><b>Calm, then storm</b><span class="d">Hear how the quiet makes the storm louder.</span></div><span class="bs-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="bs-btn bs-hear" data-snd="contrast">Hear it</button></li>
+        </ul>
+        <small>These sounds are made in your browser as you press the buttons. Nothing plays by itself. In the playable map above, "Storm sounds" turns on live rain and thunder that get louder as a storm gets closer.</small>
+      </div>
+    </section>
+
+    <section class="bs-refs" aria-labelledby="bs-h-refs">
+      <h2 id="bs-h-refs">Three worlds I learned from</h2>
+      <p>Each card says how I came to know it, what it teaches me, and what I take for BrainSail.</p>
+      <div class="bs-refgrid">
+
+        <article class="bs-ref">
+          <span class="bs-how">Played for my case study</span>
+          <h3>Hide and Luig</h3>
+          <p>by <a href="https://dialobic.itch.io/hide-luig">Dialobic</a></p>
+          <p class="bs-k">What it teaches me</p>
+          <p>Warm, hand-drawn scenes kept me playful even when I was stuck. Sound told me I was on the right track, and silence told me not yet.</p>
+          <p class="bs-k">What I take</p>
+          <p>Sound as feedback, one consistent color for navigation, and humor as the reward.</p>
+        </article>
+
+        <article class="bs-ref">
+          <span class="bs-how">Played years ago</span>
+          <h3>Machinarium</h3>
+          <p>by <a href="https://amanita-design.net">Amanita Design</a></p>
+          <p class="bs-k">What it teaches me</p>
+          <!-- EDIT: replace this sentence with your own memory of playing Machinarium -->
+          <p>I played this years ago, and its hand-drawn look is the style I keep coming back to.</p>
+          <p class="bs-k">What I take</p>
+          <p>Hand-drawn worlds that invite curiosity.</p>
+        </article>
+
+        <article class="bs-ref">
+          <span class="bs-how">Studied through documentation</span>
+          <h3>Windosill</h3>
+          <p>by Patrick Smith at <a href="https://vectorpark.com">Vectorpark</a>. Source: <a href="https://hyperallergic.com/play-surrealist-video-game">Hyperallergic</a></p>
+          <p class="bs-k">What it teaches me</p>
+          <!-- EDIT: add your own words about what the documentation showed you -->
+          <p>I have not played this one. Coverage describes surreal imagery inspired by painters like Giorgio de Chirico, which shows me that a few quiet, strange shapes can set a whole mood.</p>
+          <p class="bs-k">What I take</p>
+          <p>Quiet, surreal imagery.</p>
+        </article>
+
+      </div>
+    </section>
+    </section>
+
+    <section class="bsp-sec" id="p7" aria-labelledby="h-p7">
+      <div class="bsp-head"><span class="bsp-num">7</span><div><h2 id="h-p7">My Two-Week Build Plan</h2></div></div>
+      <div class="bsp-grid2">
+        <article class="bsp-card"><span class="bsp-tag t-src">Week 2</span><h3>Build the playable prototype</h3>
+          <ol class="bsp-list tight">
+            <li><b>Days 1 to 2.</b> The sea map: hand-drawn islands, wavy water, the boat, and steering with the arrow keys and on-screen triangles.</li>
+            <li><b>Days 3 to 4.</b> Storms that loop in circles with hit detection, then the Brainstorm screen: random problem and words from two banks, the timer, a typing box, and the "Time's up! Is your answer clear?" check.</li>
+            <li><b>Days 5 to 6.</b> Win and lose: yes calms the storm, no sinks the boat and restarts the level, reaching B rescues the princess. Levels 2 and 3 as settings for storms, time, and words.</li>
+            <li><b>Day 7.</b> Publish the prototype on my portfolio and play it start to finish.</li>
+          </ol>
+          <p class="bs-k">The first version has</p>
+          <p>One full loop, three levels, about 20 problems and 40 words, simple sounds made in the browser, and the yes or no self-check.</p></article>
+        <article class="bsp-card"><span class="bsp-tag t-obs">Week 3</span><h3>Test, refine, and publish</h3>
+          <ol class="bsp-list tight">
+            <li><b>Days 1 to 2.</b> Playtest with about five people: classmates, a friend who is not a gamer, and a child, with a parent or guardian's permission. I will watch where they laugh, get stuck, and say "oh!".</li>
+            <li><b>Days 3 to 4.</b> Refine from what I see: storm speed and size, timers, the banks (cut confusing problems and words), instructions, and touch controls for phones.</li>
+            <li><b>Days 5 to 6.</b> Polish: the art pass (palms, hero, princess, lightning), the sound pass (rain and thunder ambience, chimes), and accessibility (keyboard, reduced motion, sound off by default).</li>
+            <li><b>Day 7.</b> Publish the final game, with a short note on what testers showed me and what I changed.</li>
+          </ol></article>
+      </div>
+      <div class="bsp-grid2" style="margin-top:1.4rem">
+        <article class="bsp-card"><h3>What I will ask my testers</h3>
+          <ul class="bsp-list tight"><li>Could you tell what the goal was without me explaining?</li><li>Did a random word give you an idea you would not have had?</li><li>Did the clock feel fun or like a test?</li><li>Did the yes or no check feel honest?</li></ul></article>
+        <article class="bsp-card"><h3>Keeping the scope achievable</h3>
+          <ul class="bsp-list tight"><li>No AI grading in version one. The player decides if their answer is clear, and can paste it into an AI chat for a second opinion.</li><li>No accounts and no saving.</li><li>Built with plain HTML, CSS, and JavaScript on GitHub Pages, with AI help.</li><li>If time runs short, I cut the lightning and ambience first and keep the core loop.</li></ul></article>
+      </div>
+      <p class="bsp-done"><b>Done looks like:</b> a stranger can start the game, steer, get hit, type an idea, and finish a level in about five minutes, and most testers say at least one random word gave them a new idea.</p>
+    </section>
+
+    <section class="bs-credits" aria-labelledby="bs-h-credits">
+      <h2 id="bs-h-credits">Credits</h2>
+      <ul>
+        <li><a href="https://dialobic.itch.io/hide-luig">Hide and Luig</a> by Dialobic, on itch.io. Screenshots on this page are used for study and commentary, with credit to the maker.</li>
+        <li>Research sources: the <a href="https://dialobic.itch.io/hide-luig/devlog">Hide and Luig devlog</a>, <a href="https://dialobic.itch.io/winter-and-luig">Winter and Luig</a>, <a href="https://dialobic.itch.io/strange-and-luig">Strange and Luig</a>, the <a href="https://dialobic.itch.io/pigs-and-luig/devlog">Pigs and Luig devlog</a>, <a href="https://phaser.io/news/2026/02/hide-and-luig">Phaser news</a>, and a <a href="https://www.bontegames.com/2025/09/hide-and-luig-browser.html">blog post</a>.</li>
+        <li><a href="https://amanita-design.net">Machinarium</a> by Amanita Design.</li>
+        <li>Windosill by Patrick Smith, <a href="https://vectorpark.com">Vectorpark</a>. Background reading: <a href="https://hyperallergic.com/play-surrealist-video-game">Hyperallergic</a>.</li>
+        <li>Lateral thinking and the Six Thinking Hats are Edward de Bono's ideas. The green sail is a nod to the green hat, which stands for creative thinking.</li>
+        <li>Map and rescue-story inspiration: the overworld maps and hero-and-princess adventures of classic games such as Super Mario World (Nintendo) and Donkey Kong Country (Rare). No characters or assets from those games were used.</li>
+        <li>Fonts: Gochi Hand and Nunito, loaded from Google Fonts.</li>
+        <li>The sketches and storyboards are my own hand drawings, in Sharpie. The map, hero, princess, and flowchart are SVG drawings made with Claude from my sketches and notes. Sounds are synthesized in the browser. No images, audio, or code from the references were copied.</li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var NS = 'http://www.w3.org/2000/svg';
+  function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+  /* ===== Motion stage ===== */
+  var stage = document.getElementById('bs-stage');
+  function clearState(){ stage.classList.remove('is-hit', 'is-solved', 'is-sunk'); }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-motion]'), function(b){
+    b.addEventListener('click', function(){
+      var m = b.getAttribute('data-motion');
+      if (m === 'reset') { clearState(); return; }
+      if (m === 'hit') {
+        clearState(); void stage.offsetWidth;
+        stage.classList.add('is-hit');
+        setTimeout(function(){ stage.classList.remove('is-hit'); }, 600);
+        return;
+      }
+      clearState(); void stage.offsetWidth;
+      stage.classList.add(m === 'solve' ? 'is-solved' : 'is-sunk');
+    });
+  });
+
+  /* ===== Sounds, synthesized with the Web Audio API ===== */
+  var ctx = null, master = null, muted = false, ambienceOn = false, rainNode = null;
+  var muteBtn = document.getElementById('bs-mute');
+  var status = document.getElementById('bs-status');
+  var ambiBtn = document.getElementById('bs-ambi');
+
+  function ensure(){
+    if (!ctx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = 0.9;
+      master.connect(ctx.destination);
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return true;
+  }
+  function live(){ return !!ctx && !muted; }
+  function noiseBuffer(sec){
+    var len = Math.floor(ctx.sampleRate * sec);
+    var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    return buf;
+  }
+  function tone(o){
+    var t = ctx.currentTime + (o.start || 0);
+    var dur = o.dur || 0.3, gain = o.gain || 0.2;
+    var osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.type = o.type || 'sine';
+    osc.frequency.setValueAtTime(o.freq, t);
+    if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gain, t + (o.attack || 0.006));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    if (o.vib) {
+      var lfo = ctx.createOscillator(), lg = ctx.createGain();
+      lfo.frequency.value = o.vib; lg.gain.value = o.freq * 0.05;
+      lfo.connect(lg); lg.connect(osc.frequency);
+      lfo.start(t); lfo.stop(t + dur + 0.05);
+    }
+    osc.connect(g); g.connect(master);
+    osc.start(t); osc.stop(t + dur + 0.05);
+  }
+  function water(o){
+    var t = ctx.currentTime + (o.start || 0);
+    var dur = o.dur || 2.4, gain = o.gain || 0.08;
+    var src = ctx.createBufferSource(); src.buffer = noiseBuffer(dur);
+    var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 520;
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(gain, t + dur * 0.3);
+    g.gain.linearRampToValueAtTime(gain * 0.55, t + dur * 0.55);
+    g.gain.linearRampToValueAtTime(gain, t + dur * 0.75);
+    g.gain.linearRampToValueAtTime(0.0001, t + dur);
+    src.connect(lp); lp.connect(g); g.connect(master);
+    src.start(t);
+  }
+  function rainBed(o){
+    var t = ctx.currentTime + (o.start || 0);
+    var dur = o.dur || 3, gain = o.gain || 0.1;
+    var src = ctx.createBufferSource(); src.buffer = noiseBuffer(dur);
+    var hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1200;
+    var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 7000;
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(gain, t + 0.5);
+    g.gain.linearRampToValueAtTime(gain, t + dur - 0.7);
+    g.gain.linearRampToValueAtTime(0.0001, t + dur);
+    src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(master);
+    src.start(t);
+  }
+  function thunder(o){
+    o = o || {};
+    var t = ctx.currentTime + (o.start || 0), gn = o.gain || 0.4;
+    var src = ctx.createBufferSource(); src.buffer = noiseBuffer(2.6);
+    var lp = ctx.createBiquadFilter(); lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(1400, t);
+    lp.frequency.exponentialRampToValueAtTime(90, t + 2.2);
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gn, t + 0.03);
+    g.gain.exponentialRampToValueAtTime(gn * 0.45, t + 0.35);
+    g.gain.linearRampToValueAtTime(gn * 0.6, t + 0.55);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 2.5);
+    src.connect(lp); lp.connect(g); g.connect(master);
+    src.start(t);
+  }
+  function rainStart(){
+    if (!ctx || rainNode) return;
+    var src = ctx.createBufferSource(); src.buffer = noiseBuffer(2); src.loop = true;
+    var hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1200;
+    var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 7000;
+    var g = ctx.createGain(); g.gain.value = 0.0001;
+    src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(master);
+    src.start();
+    rainNode = {src: src, g: g};
+  }
+  function rainLevel(v){ if (rainNode) rainNode.g.gain.setTargetAtTime(Math.max(0.0001, v), ctx.currentTime, 0.25); }
+  function rainStop(){
+    if (!rainNode) return;
+    var n = rainNode; rainNode = null;
+    n.g.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.2);
+    setTimeout(function(){ try { n.src.stop(); } catch (e) {} }, 1000);
+  }
+
+  var sounds = {
+    calm: function(){ water({dur: 2.8, gain: 0.1}); },
+    rain: function(){ rainBed({dur: 3.6, gain: 0.12}); },
+    thunder: function(){ thunder({gain: 0.45}); },
+    plink: function(){
+      [261.63, 329.63, 392, 440].forEach(function(f, i){ tone({freq: f, type: 'triangle', start: i * 0.05, dur: 0.8, gain: 0.16}); });
+      [523.25, 659.25, 783.99].forEach(function(f, i){ tone({freq: f, type: 'sine', start: 0.6 + i * 0.2, dur: 0.4, gain: 0.2}); });
+    },
+    bloop: function(){
+      tone({freq: 150, to: 70, dur: 0.5, gain: 0.4, vib: 14});
+      tone({freq: 120, to: 55, start: 0.28, dur: 0.5, gain: 0.35, vib: 12});
+    },
+    tick1: function(){
+      tone({freq: 900, type: 'square', dur: 0.06, gain: 0.1});
+      tone({freq: 620, type: 'triangle', dur: 0.1, gain: 0.18});
+    },
+    tick: function(){ [0, 0.5, 1.0].forEach(function(s){
+      tone({freq: 900, type: 'square', start: s, dur: 0.06, gain: 0.1});
+      tone({freq: 620, type: 'triangle', start: s, dur: 0.1, gain: 0.18});
+    }); },
+    good: function(){
+      [523.25, 659.25, 783.99, 1046.5].forEach(function(f, i){
+        tone({freq: f, type: 'sine', start: i * 0.11, dur: 0.55, gain: 0.22});
+        tone({freq: f * 2, type: 'triangle', start: i * 0.11, dur: 0.25, gain: 0.06});
+      });
+    },
+    sink: function(){
+      tone({freq: 1100, to: 220, dur: 1.1, gain: 0.22, vib: 7});
+      [1.0, 1.15, 1.3].forEach(function(s){ tone({freq: 400, to: 900, start: s, dur: 0.09, gain: 0.14}); });
+    },
+    jingle: function(){
+      var n = [523.25, 659.25, 783.99, 659.25, 1046.5];
+      var s = [0, 0.14, 0.28, 0.42, 0.58];
+      n.forEach(function(f, i){
+        var d = i === n.length - 1 ? 0.8 : 0.28;
+        tone({freq: f, type: 'sine', start: s[i], dur: d, gain: 0.22});
+        tone({freq: f * 2, type: 'triangle', start: s[i], dur: d * 0.5, gain: 0.05});
+      });
+    },
+    contrast: function(){
+      water({dur: 2.3, gain: 0.06});
+      tone({freq: 150, to: 70, start: 2.3, dur: 0.5, gain: 0.55, vib: 14});
+      tone({freq: 120, to: 55, start: 2.58, dur: 0.5, gain: 0.5, vib: 12});
+      rainBed({start: 2.4, dur: 2.2, gain: 0.1});
+      thunder({start: 2.9, gain: 0.45});
+    }
+  };
+  function play(name){ if (live() && sounds[name]) sounds[name](); }
+  var lengths = {calm: 2800, rain: 3600, thunder: 2600, plink: 1400, bloop: 900, tick: 1300, good: 900, sink: 1600, jingle: 1500, contrast: 5000};
+
+  function soundOn(){
+    muted = false;
+    if (master) master.gain.value = 0.9;
+    muteBtn.disabled = false;
+    muteBtn.textContent = 'Mute sounds';
+    status.textContent = 'Sound is on.';
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.bs-hear'), function(b){
+    b.addEventListener('click', function(){
+      if (!ensure()) { status.textContent = 'Your browser cannot play these sounds.'; return; }
+      soundOn();
+      var name = b.getAttribute('data-snd');
+      sounds[name]();
+      var bars = b.parentNode.querySelector('.bs-bars');
+      bars.classList.add('playing');
+      setTimeout(function(){ bars.classList.remove('playing'); }, lengths[name] || 1200);
+    });
+  });
+  muteBtn.addEventListener('click', function(){
+    if (!ctx) return;
+    muted = !muted;
+    master.gain.value = muted ? 0 : 0.9;
+    muteBtn.textContent = muted ? 'Unmute sounds' : 'Mute sounds';
+    status.textContent = muted ? 'Sounds are muted.' : 'Sound is on.';
+  });
+  ambiBtn.addEventListener('click', function(){
+    if (!ambienceOn) {
+      if (!ensure()) { return; }
+      soundOn();
+      ambienceOn = true;
+      ambiBtn.textContent = 'Storm sounds: on';
+      ambiBtn.setAttribute('aria-pressed', 'true');
+    } else {
+      ambienceOn = false; rainStop();
+      ambiBtn.textContent = 'Storm sounds: off';
+      ambiBtn.setAttribute('aria-pressed', 'false');
+    }
+  });
+
+  /* ===== Playable sketch: sea map and the solve screen ===== */
+  var mapEl = document.getElementById('bs-map');
+  var seaScr = document.getElementById('bs-seascr');
+  var solveScr = document.getElementById('bs-solvescr');
+  var boatG = document.getElementById('bs-mapboat');
+  var shakeG = boatG.firstElementChild;
+  var hint = document.getElementById('bs-maphint');
+  var fx = document.getElementById('bs-flashfx');
+
+  var clouds = [
+    {id: 'bs-mc1', cx: 210, cy: 250, r: 62, w: 1.3, a: 0.6},
+    {id: 'bs-mc2', cx: 300, cy: 150, r: 70, w: -1.1, a: 2.4},
+    {id: 'bs-mc3', cx: 410, cy: 240, r: 54, w: 1.5, a: 4.1}
+  ];
+  clouds.forEach(function(c){
+    c.a0 = c.a; c.grp = document.getElementById(c.id);
+    c.bolt = c.grp.querySelector('.bs-mbolt'); c.x = 0; c.y = 0; c.gone = false;
+  });
+  var START = {x: 172, y: 312}, GOAL = {x: 440, y: 100}, HIT = 54, STEP = 20;
+  var bx = START.x, by = START.y, mode = 'sea', running = false, last = 0, grace = 0, idleT = null, flashT = null;
+  var DEFAULT = 'Steer around the storms and reach the princess at B.';
+
+  var PROBLEMS = [
+    'Nobody visits the town library.',
+    'The school cafeteria throws away too much food.',
+    'Neighbors on the same street never talk to each other.',
+    'A busy park is covered in litter.',
+    'Customers visit the cafe once and never come back.',
+    'Students forget to turn in their homework.',
+    'Bike lanes sit empty while traffic is jammed.',
+    'People ignore the recycling bins at work.'
+  ];
+  var WORDS = ['love','book','wisdom','lemon','cookie','butterfly','lantern','bridge','mirror','garden','compass','bubble','ladder','whistle','umbrella','honey','puzzle','drum','kite','thunder','map','seed','echo','ribbon'];
+  var lastProblem = -1;
+
+  function say(t){ hint.textContent = t; }
+  function placeBoat(){ boatG.setAttribute('transform', 'translate(' + bx + ' ' + by + ')'); }
+  function placeClouds(){
+    clouds.forEach(function(c){
+      c.x = c.cx + Math.cos(c.a) * c.r; c.y = c.cy + Math.sin(c.a) * c.r;
+      c.grp.setAttribute('transform', 'translate(' + c.x.toFixed(1) + ' ' + c.y.toFixed(1) + ')');
+    });
+  }
+  function nearest(){
+    var m = 999;
+    clouds.forEach(function(c){ if (!c.gone) m = Math.min(m, Math.hypot(bx - c.x, by - c.y)); });
+    return m;
+  }
+  function ambience(){
+    if (!(ambienceOn && live())) return;
+    rainStart();
+    rainLevel(mode === 'solve' ? 0.1 : 0.15 * clamp(1 - (nearest() - 55) / 210, 0, 1));
+  }
+  function showScreen(which){
+    var sea = which === 'sea';
+    seaScr.classList.toggle('is-off', !sea); solveScr.classList.toggle('is-off', sea);
+    seaScr.inert = !sea; solveScr.inert = sea;
+    seaScr.setAttribute('aria-hidden', sea ? 'false' : 'true'); solveScr.setAttribute('aria-hidden', sea ? 'true' : 'false');
+  }
+  seaScr.inert = false; solveScr.inert = true;
+
+  function resetMap(){
+    bx = START.x; by = START.y;
+    clouds.forEach(function(c){ c.gone = false; c.a = c.a0; c.grp.classList.remove('is-gone'); });
+    shakeG.classList.remove('is-sunk', 'is-hit');
+    mode = 'sea'; grace = performance.now() + 1200;
+    placeBoat(); placeClouds(); say(DEFAULT);
+  }
+  function flashCloud(c){
+    c.bolt.classList.remove('on'); void c.bolt.getBoundingClientRect(); c.bolt.classList.add('on');
+    setTimeout(function(){ c.bolt.classList.remove('on'); }, 450);
+    if (!reduce) { fx.classList.remove('on'); void fx.offsetWidth; fx.classList.add('on'); }
+    if (ambienceOn && live()) {
+      var d = Math.hypot(bx - c.x, by - c.y);
+      setTimeout(function(){ if (live()) thunder({gain: 0.45 * clamp(1 - (d - 60) / 520, 0.25, 1)}); }, 250 + d * 2);
+    }
+  }
+  function scheduleFlash(){
+    clearTimeout(flashT);
+    flashT = setTimeout(function(){
+      var alive = clouds.filter(function(c){ return !c.gone; });
+      if (alive.length && mode === 'sea') flashCloud(alive[Math.floor(Math.random() * alive.length)]);
+      scheduleFlash();
+    }, 3200 + Math.random() * 4200);
+  }
+
+  function hitCloud(c){
+    mode = 'hit';
+    shakeG.classList.remove('is-hit'); void shakeG.getBoundingClientRect(); shakeG.classList.add('is-hit');
+    play('bloop');
+    say('A Brainstorm hits! A second screen opens.');
+    setTimeout(function(){ shakeG.classList.remove('is-hit'); openSolve(c); }, 700);
+  }
+  function check(now){
+    if (mode !== 'sea') return;
+    if (Math.hypot(bx - GOAL.x, by - GOAL.y) < 48) {
+      mode = 'won'; play('jingle');
+      say('You reached B and rescued the princess! Level complete. Sailing back to A...');
+      setTimeout(resetMap, 3400); return;
+    }
+    if (now < grace) return;
+    for (var i = 0; i < clouds.length; i++) {
+      var c = clouds[i];
+      if (!c.gone && Math.hypot(bx - c.x, by - c.y) < HIT) { hitCloud(c); return; }
+    }
+  }
+  function tick(ts){
+    var dt = Math.min(0.05, (ts - last) / 1000); last = ts;
+    if (mode === 'sea') {
+      clouds.forEach(function(c){ c.a += c.w * dt; });
+      placeClouds(); ambience(); check(ts);
+    }
+    requestAnimationFrame(tick);
+  }
+  function startLoop(){
+    if (running) return;
+    running = true; scheduleFlash();
+    if (!reduce) { last = performance.now(); requestAnimationFrame(tick); }
+  }
+  function move(dir){
+    if (mode !== 'sea') return;
+    startLoop();
+    if (dir === 'left') bx -= STEP; else if (dir === 'right') bx += STEP;
+    else if (dir === 'up') by -= STEP; else if (dir === 'down') by += STEP;
+    bx = clamp(bx, 36, 484); by = clamp(by, 36, 346);
+    placeBoat(); ambience(); check(performance.now());
+    clearTimeout(idleT); idleT = setTimeout(function(){ if (mode === 'sea') rainStop(); }, 12000);
+  }
+
+  /* Solve screen */
+  var TOTAL = 30, tStart = 0, tI = null, lastLeft = -1, curCloud = null;
+  var ringG = document.getElementById('bs-ring-ticks'), secsEl = document.getElementById('bs-ring-secs');
+  var ticks = [];
+  for (var i = 0; i < 24; i++) {
+    var a = i * 15 * Math.PI / 180;
+    var l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', (50 + Math.sin(a) * 36).toFixed(1)); l.setAttribute('y1', (50 - Math.cos(a) * 36).toFixed(1));
+    l.setAttribute('x2', (50 + Math.sin(a) * 46).toFixed(1)); l.setAttribute('y2', (50 - Math.cos(a) * 46).toFixed(1));
+    ringG.appendChild(l); ticks.push(l);
+  }
+  var idea = document.getElementById('bs-idea'), timesup = document.getElementById('bs-timesup');
+  var cardsEl = document.getElementById('bs-wordcards'), probEl = document.getElementById('bs-problem');
+  function drawRing(el){
+    var left = Math.max(0, Math.ceil(TOTAL - el));
+    var erased = Math.floor(Math.min(1, el / TOTAL) * 24);
+    ticks.forEach(function(t, k){ t.style.opacity = k < erased ? 0 : 1; });
+    secsEl.textContent = left;
+    if (left <= 10 && left > 0 && left !== lastLeft) { lastLeft = left; play('tick1'); }
+  }
+  function openSolve(c){
+    curCloud = c; mode = 'solve';
+    var p; do { p = Math.floor(Math.random() * PROBLEMS.length); } while (p === lastProblem);
+    lastProblem = p; probEl.textContent = PROBLEMS[p];
+    var pool = WORDS.slice(), picks = [];
+    for (var k = 0; k < 3; k++) picks.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+    cardsEl.innerHTML = '';
+    picks.forEach(function(w){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'bs-wc'; b.textContent = w; b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function(){
+        Array.prototype.forEach.call(cardsEl.children, function(x){
+          var on = x === b; x.setAttribute('aria-pressed', on ? 'true' : 'false');
+          x.classList.toggle('is-on', on); x.classList.toggle('is-off', !on);
+        });
+        if (!idea.readOnly) idea.focus({preventScroll: true});
+      });
+      cardsEl.appendChild(b);
+    });
+    idea.value = ''; idea.readOnly = false; timesup.hidden = true;
+    showScreen('solve'); ambience();
+    lastLeft = -1; drawRing(0); tStart = performance.now();
+    clearInterval(tI);
+    tI = setInterval(function(){
+      var el = (performance.now() - tStart) / 1000;
+      drawRing(el);
+      if (el >= TOTAL) { clearInterval(tI); timeUp(); }
+    }, 200);
+    setTimeout(function(){ idea.focus({preventScroll: true}); }, 50);
+  }
+  function timeUp(){
+    idea.readOnly = true; timesup.hidden = false;
+    document.getElementById('bs-yes').focus({preventScroll: true});
+  }
+  function answer(yes){
+    clearInterval(tI);
+    var c = curCloud; showScreen('sea');
+    if (yes) {
+      play('good'); c.gone = true; c.grp.classList.add('is-gone');
+      var d = Math.hypot(bx - c.x, by - c.y) || 1;
+      bx = clamp(bx + (bx - c.x) / d * 40, 36, 484); by = clamp(by + (by - c.y) / d * 40, 36, 346);
+      placeBoat(); mode = 'sea'; grace = performance.now() + 1500;
+      say('Storm calmed! Keep sailing toward the princess at B.');
+      mapEl.focus({preventScroll: true});
+    } else {
+      play('sink'); mode = 'sink';
+      shakeG.classList.add('is-sunk');
+      say('The boat sank. Same level, with a new problem and new words. Try again!');
+      setTimeout(resetMap, 1900);
+    }
+  }
+  document.getElementById('bs-yes').addEventListener('click', function(){ answer(true); });
+  document.getElementById('bs-no').addEventListener('click', function(){ answer(false); });
+
+  /* Keys */
+  var keyBtns = {}, hold = null;
+  Array.prototype.forEach.call(document.querySelectorAll('.bs-key'), function(b){
+    var dir = b.getAttribute('data-dir'); keyBtns[dir] = b;
+    function stop(){ clearInterval(hold); hold = null; b.classList.remove('is-down'); }
+    b.addEventListener('pointerdown', function(e){
+      e.preventDefault(); mapEl.focus({preventScroll: true});
+      b.classList.add('is-down'); move(dir);
+      clearInterval(hold); hold = setInterval(function(){ move(dir); }, 80);
+    });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function(ev){ b.addEventListener(ev, stop); });
+    b.addEventListener('click', function(e){ if (e.detail === 0) move(dir); });
+  });
+  var keyMap = {ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down'};
+  mapEl.addEventListener('keydown', function(e){
+    var dir = keyMap[e.key]; if (!dir) return;
+    e.preventDefault(); keyBtns[dir].classList.add('is-down'); move(dir);
+  });
+  mapEl.addEventListener('keyup', function(e){
+    var dir = keyMap[e.key]; if (dir) keyBtns[dir].classList.remove('is-down');
+  });
+  mapEl.addEventListener('pointerdown', function(){ mapEl.focus({preventScroll: true}); });
+  placeBoat(); placeClouds(); say(DEFAULT);
+})();
+</script>
+</body>
+</html>
