@@ -1,0 +1,487 @@
+:root {
+  --ink: #1b1b1b;
+  --paper: #fbf8f1;
+  --paper-dark: #efe7d8;
+  --sea: #4fa3c7;
+  --sun: #f7d154;
+  --boat: #3c9d57;
+  --muted: #625e56;
+  --shadow: rgba(27, 27, 27, 0.16);
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--paper-dark); }
+
+body {
+  min-width: 0;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255,255,255,.48), transparent 32rem),
+    var(--paper);
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+body::before {
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    repeating-linear-gradient(17deg, rgba(65, 48, 25, .018) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(103deg, rgba(255, 255, 255, .035) 0 1px, transparent 1px 7px),
+    radial-gradient(ellipse at center, transparent 58%, rgba(64, 45, 20, .10) 125%);
+  mix-blend-mode: multiply;
+}
+
+button, textarea, input { font: inherit; }
+button { color: inherit; }
+
+.svg-library { position: absolute; overflow: hidden; }
+
+.game-shell {
+  width: min(100% - 32px, 980px);
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 64px) 0;
+}
+
+.screen { width: 100%; animation: paper-flip .28s ease-out both; transform-origin: 50% 0; }
+.screen[hidden] { display: none !important; }
+
+h1, h2, .clock {
+  margin: 0;
+  font-family: "Gochi Hand", "Comic Sans MS", cursive;
+  font-weight: 400;
+  line-height: 1;
+}
+
+h1 { font-size: clamp(2.8rem, 9vw, 5.5rem); }
+p { margin: 0; }
+
+.eyebrow {
+  margin-bottom: .45rem;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.start-screen {
+  max-width: 760px;
+  min-height: min(680px, calc(100vh - 80px));
+  display: grid;
+  align-content: center;
+  gap: 1.2rem;
+}
+
+.start-screen > p { max-width: 660px; font-size: clamp(1.05rem, 2.4vw, 1.28rem); }
+
+.start-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: .6rem;
+}
+
+.tester-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem .8rem;
+  align-items: center;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 700;
+}
+.back-link {
+  width: fit-content;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 1px solid currentColor;
+  color: var(--muted);
+  font-size: .88rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.back-link:hover { color: var(--ink); }
+.back-link:focus-visible { outline: 4px solid var(--sun); outline-offset: 4px; }
+.text-button {
+  min-height: 44px;
+  padding: .3rem .15rem;
+  border: 0;
+  border-bottom: 2px solid currentColor;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.button, .direction-button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 3px solid var(--ink);
+  border-radius: 8px 11px 7px 10px;
+  background: var(--paper);
+  box-shadow: 3px 4px 0 var(--ink);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.button { padding: .72rem 1.2rem; }
+.button-primary { background: var(--sun); }
+.button:hover { transform: translateY(-1px); }
+.button:active, .direction-button:active { transform: translate(2px, 2px); box-shadow: 1px 2px 0 var(--ink); }
+.button:focus-visible, .direction-button:focus-visible, textarea:focus-visible, .word-card:focus-visible, .sea-map:focus-visible { outline: 4px solid var(--sun); outline-offset: 4px; }
+
+.sound-switch {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: .7rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.sound-switch input { position: absolute; opacity: 0; pointer-events: none; }
+.switch-track {
+  position: relative;
+  width: 54px;
+  height: 30px;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+}
+.switch-track span {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper-dark);
+  transition: transform .18s ease;
+}
+.sound-switch input:checked + .switch-track { background: var(--sun); }
+.sound-switch input:checked + .switch-track span { transform: translateX(22px); }
+.sound-switch input:focus-visible + .switch-track { outline: 4px solid var(--sun); outline-offset: 4px; }
+
+.play-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.play-header h1 { font-size: clamp(2rem, 6vw, 3.6rem); }
+.play-header p { font-weight: 800; text-align: right; }
+
+.sea-map {
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 760 / 440;
+  border: 4px solid var(--ink);
+  border-radius: 12px 8px 14px 10px;
+  background: var(--sea);
+  box-shadow: 6px 8px 0 var(--ink);
+  touch-action: manipulation;
+}
+.sea-map svg { display: block; width: 100%; height: 100%; }
+.sea-fill { fill: var(--sea); }
+.water-layer { transform-box: fill-box; transform-origin: center; will-change: transform; }
+.water-layer-far { animation: drift-far 13s linear infinite; }
+.water-layer-near { animation: drift-near 7s linear infinite; }
+.map-point circle:first-child { fill: none; stroke: var(--ink); stroke-width: 3; }
+.map-point text { fill: var(--ink); font: 32px "Gochi Hand", cursive; }
+.storm { transition: opacity .32s ease, transform .2s ease; }
+.storm-shadow, .boat-shadow { fill: rgba(27, 27, 27, .17); }
+.storm-art { transform-box: fill-box; transform-origin: center; animation: cloud-life 2.8s ease-in-out infinite; }
+.storm:nth-child(even) .storm-art { animation-delay: -1.3s; }
+.lightning-bolt { opacity: 0; }
+.storm.is-striking .lightning-bolt { animation: lightning-flash .36s steps(2, end) both; }
+.storm.is-striking .cloud-art { animation: cloud-bright .36s steps(2, end) both; }
+.storm.is-calmed { opacity: 0; }
+#boat { will-change: transform; }
+.boat-art { transform-box: fill-box; transform-origin: center bottom; animation: boat-life 2.25s ease-in-out infinite; }
+.princess-art { transform-box: fill-box; transform-origin: center bottom; animation: princess-wobble 3.1s ease-in-out infinite; }
+.help-bubble { transform-box: fill-box; transform-origin: center; animation: bubble-shake 1.8s ease-in-out infinite; }
+.help-bubble text { fill: var(--ink); font: 16px "Gochi Hand", cursive; }
+.crab { pointer-events: none; }
+.crab-body, .crab-pincer { fill: var(--ink); stroke: var(--ink); stroke-width: 1.5; }
+.crab-arm, .crab-legs { fill: none; stroke: var(--ink); stroke-width: 2.4; }
+.crab-eye { fill: #b11226; stroke: var(--ink); stroke-width: .8; }
+.crab-pupil { fill: var(--ink); stroke: none; }
+.crab-brow { fill: none; stroke: #b11226; stroke-width: 2.8; }
+.crab-frown { fill: none; stroke: #b11226; stroke-width: 2.7; }
+.crab-mouthparts { fill: #b11226; stroke: var(--ink); stroke-width: .65; }
+.crab-claw-tip { fill: #78101b; stroke: var(--ink); stroke-width: .45; }
+.crab-highlight { fill: none; stroke: #404348; stroke-width: 1.2; }
+.crab-claw { transform-box: fill-box; transform-origin: center bottom; }
+.giant-crab .crab-claw-left { animation: claw-snap-left 1.65s ease-in-out infinite; }
+.giant-crab .crab-claw-right { animation: claw-snap-right 1.65s ease-in-out infinite; animation-delay: -.18s; }
+
+.fish { pointer-events: none; }
+.fish-body { stroke: var(--ink); stroke-width: 2.7; stroke-linejoin: round; }
+.fish-spot { stroke: var(--ink); stroke-width: 1.5; }
+.fish-eye { stroke: var(--ink); stroke-width: 1.6; }
+.fish-smile { stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; }
+.fish-speech rect, .fish-speech path { fill: var(--paper); stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+.fish-speech text { fill: var(--ink); font: 700 11px "Nunito", system-ui, sans-serif; }
+.fish-splash { fill: none; stroke: var(--paper); stroke-width: 3; opacity: 0; }
+.fish.is-splashing .fish-shape, .fish.is-splashing .fish-speech { opacity: 0; }
+.fish.is-splashing .fish-splash { animation: splash-ring .42s ease-out both; }
+
+.sailing-message {
+  min-height: 3.2rem;
+  margin: 1rem 0 .4rem;
+  font-weight: 700;
+}
+
+.steering {
+  display: grid;
+  grid-template-columns: repeat(3, 56px);
+  justify-content: center;
+  gap: 8px;
+  margin-top: .5rem;
+}
+.map-actions, .pause-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .8rem;
+  margin-top: 1.2rem;
+}
+.direction-button { display: grid; place-items: center; padding: 0; background: var(--paper); }
+.triangle { display: block; width: 0; height: 0; }
+.triangle-up { border-right: 11px solid transparent; border-bottom: 18px solid var(--ink); border-left: 11px solid transparent; }
+.triangle-down { border-top: 18px solid var(--ink); border-right: 11px solid transparent; border-left: 11px solid transparent; }
+.triangle-left { border-top: 11px solid transparent; border-right: 18px solid var(--ink); border-bottom: 11px solid transparent; }
+.triangle-right { border-top: 11px solid transparent; border-bottom: 11px solid transparent; border-left: 18px solid var(--ink); }
+
+.paper-card {
+  position: relative;
+  padding: clamp(20px, 5vw, 52px);
+  border: 4px solid var(--ink);
+  border-radius: 12px 8px 14px 10px;
+  background: var(--paper);
+  box-shadow: 7px 9px 0 var(--ink);
+}
+.paper-card::before, .paper-card::after {
+  position: absolute;
+  top: -12px;
+  width: 72px;
+  height: 24px;
+  background: rgba(225, 207, 166, .76);
+  box-shadow: 0 1px 1px rgba(27, 27, 27, .12);
+  content: "";
+  transform: rotate(-3deg);
+}
+.paper-card::before { left: 8%; }
+.paper-card::after { right: 8%; transform: rotate(3deg); }
+
+.brainstorm-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+.brainstorm-heading h1 { font-size: clamp(2.3rem, 7vw, 4.6rem); }
+.clock {
+  flex: 0 0 auto;
+  min-width: 104px;
+  padding: .5rem .65rem;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--sun);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  text-align: center;
+}
+
+#brainstorm-instructions { max-width: 780px; margin-bottom: 1.2rem; font-weight: 700; }
+.problem-block {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 3px solid var(--ink);
+  border-radius: 5px 12px 6px 10px;
+  background: var(--paper-dark);
+}
+.problem-block span { font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.problem-block p { margin-top: .25rem; font-size: clamp(1.1rem, 3vw, 1.35rem); font-weight: 800; }
+
+.word-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 1rem 0 1.3rem;
+}
+.word-card {
+  min-height: 54px;
+  padding: .65rem;
+  border: 3px solid var(--ink);
+  border-radius: 11px 6px 9px 5px;
+  background: var(--paper);
+  cursor: pointer;
+  font-family: "Gochi Hand", cursive;
+  font-size: clamp(1.35rem, 4vw, 2rem);
+}
+.word-card.is-chosen { background: var(--sun); transform: rotate(-1deg); }
+.word-card.is-dimmed { opacity: .38; }
+
+label[for="idea-box"] { display: block; margin-bottom: .35rem; font-weight: 800; }
+#idea-box {
+  display: block;
+  width: 100%;
+  min-height: 142px;
+  resize: vertical;
+  border: 3px solid var(--ink);
+  border-radius: 8px 5px 11px 7px;
+  padding: .9rem;
+  color: var(--ink);
+  background: #fffef9;
+  font-family: "Gochi Hand", "Comic Sans MS", cursive;
+  font-size: 1.4rem;
+}
+#idea-box:disabled { color: var(--muted); background: var(--paper-dark); opacity: 1; }
+.idea-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: .55rem;
+}
+.character-count { color: var(--muted); font-size: .8rem; }
+.finish-idea-button { min-width: 92px; }
+.button:disabled {
+  cursor: not-allowed;
+  opacity: .42;
+  transform: none;
+  box-shadow: 3px 4px 0 var(--ink);
+}
+
+.time-up-panel {
+  margin-top: 1.3rem;
+  padding-top: 1.2rem;
+  border-top: 3px solid var(--ink);
+}
+.time-up-panel > p { margin-bottom: 1rem; font-size: clamp(1.15rem, 3vw, 1.4rem); font-weight: 800; }
+.answer-buttons { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+.end-screen {
+  max-width: 760px;
+  margin: clamp(20px, 8vh, 90px) auto 0;
+}
+.end-screen h1 { margin-bottom: 1rem; }
+.end-screen > p:not(.eyebrow, .stage-note) { margin-bottom: 1.5rem; font-size: clamp(1.05rem, 2.5vw, 1.25rem); }
+.stage-note { margin-top: 1rem; font-weight: 800; }
+
+.about-draft {
+  margin-top: clamp(54px, 9vw, 100px);
+  padding: clamp(28px, 5vw, 54px) 0 12px;
+  border-top: 3px solid var(--ink);
+}
+.about-draft h2 { margin-bottom: 1.6rem; font-size: clamp(2.4rem, 7vw, 4.5rem); }
+.about-draft-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 46px); }
+.about-draft h3 { margin: 0 0 .55rem; font-family: "Gochi Hand", "Comic Sans MS", cursive; font-size: 1.8rem; line-height: 1.1; }
+.about-draft p { color: #302f2c; }
+
+body.motion-stopped .water-layer,
+body.motion-stopped .storm-art,
+body.motion-stopped .boat-art,
+body.motion-stopped .princess-art,
+body.motion-stopped .help-bubble,
+body.motion-stopped .crab-claw,
+body.motion-stopped .lightning-bolt,
+body.motion-stopped .fish,
+body.motion-stopped .fish-splash {
+  animation-play-state: paused !important;
+}
+
+@keyframes paper-flip {
+  from { opacity: 0; transform: perspective(700px) rotateX(-3deg) translateY(7px); }
+  to { opacity: 1; transform: perspective(700px) rotateX(0) translateY(0); }
+}
+@keyframes drift-far {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(63px, 5px); }
+  100% { transform: translate(126px, 0); }
+}
+@keyframes drift-near {
+  0% { transform: translate(0, 2px); }
+  50% { transform: translate(52px, -6px); }
+  100% { transform: translate(104px, 2px); }
+}
+@keyframes cloud-life {
+  0%, 100% { transform: translateY(-2px) rotate(-.35deg); }
+  50% { transform: translateY(4px) rotate(.35deg); }
+}
+@keyframes boat-life {
+  0%, 100% { transform: rotate(-1.2deg) skewX(-.2deg); }
+  50% { transform: rotate(1.2deg) skewX(.2deg); }
+}
+@keyframes princess-wobble {
+  0%, 100% { transform: rotate(-.4deg); }
+  50% { transform: rotate(.45deg); }
+}
+@keyframes bubble-shake {
+  0%, 88%, 100% { transform: translate(0, 0) rotate(0); }
+  91% { transform: translate(-2px, 0) rotate(-1deg); }
+  95% { transform: translate(2px, -1px) rotate(1deg); }
+}
+@keyframes claw-snap-left {
+  0%, 72%, 100% { transform: rotate(0); }
+  78% { transform: rotate(8deg); }
+  85% { transform: rotate(-4deg); }
+  92% { transform: rotate(5deg); }
+}
+@keyframes claw-snap-right {
+  0%, 72%, 100% { transform: rotate(0); }
+  78% { transform: rotate(-8deg); }
+  85% { transform: rotate(4deg); }
+  92% { transform: rotate(-5deg); }
+}
+@keyframes lightning-flash {
+  0%, 100% { opacity: 0; }
+  18%, 70% { opacity: 1; }
+  45% { opacity: .18; }
+}
+@keyframes cloud-bright {
+  0%, 100% { filter: none; }
+  30%, 70% { filter: brightness(1.25); }
+}
+@keyframes splash-ring {
+  from { opacity: .9; transform: scale(.35); }
+  to { opacity: 0; transform: scale(1.4); }
+}
+
+@media (max-width: 560px) {
+  .game-shell { width: min(100% - 20px, 980px); padding: 18px 0 30px; }
+  .start-screen { min-height: calc(100vh - 48px); }
+  .play-header { align-items: start; }
+  .play-header h1 { font-size: 2rem; }
+  .play-header p { max-width: 145px; font-size: .82rem; }
+  .sea-map { border-width: 3px; box-shadow: 4px 5px 0 var(--ink); }
+  .sailing-message { font-size: .88rem; }
+  .paper-card { padding: 18px 14px; box-shadow: 4px 5px 0 var(--ink); }
+  .brainstorm-heading { align-items: center; }
+  .brainstorm-heading h1 { font-size: 2.35rem; }
+  .clock { min-width: 84px; font-size: 2rem; }
+  .word-cards { gap: .4rem; }
+  .word-card { padding: .45rem .25rem; font-size: 1.35rem; }
+  .answer-buttons { display: grid; grid-template-columns: 1fr; }
+  .answer-buttons .button { width: 100%; }
+  .about-draft-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .water-layer-far { animation: drift-far 40s linear infinite !important; }
+  .water-layer-near { animation: drift-near 28s linear infinite !important; }
+  .storm-art, .boat-art, .princess-art, .help-bubble, .crab-claw { animation: none !important; }
+  .fish { display: none; }
+}
